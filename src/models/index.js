@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
+const { v4: uuidv4 } = require('uuid');
+
 
 const UserSchema = new Schema({
     name: String,
@@ -165,6 +167,11 @@ const TaxRecordSchema = new Schema({
     taxPaid: { type: Number, default: 0 },
     tdsDetails: { type: Number, default: 0 },
     recommendations: RecommendationSchema,
+    uui: {
+        type: String,
+        default: uuidv4,
+        index: true
+    },
     createdAt: { type: Date, default: Date.now }
 });
 
