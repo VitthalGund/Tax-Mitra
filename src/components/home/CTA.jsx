@@ -17,13 +17,13 @@ const containerVariants = {
 const Cta = () => {
   return (
     <motion.section
-      className="py-20 bg-teal-600 rounded-lg text-white"
+      className="py-20 container bg-gradient-to-r from-teal-900 via-teal-900 to-taxmitra-teal-light"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true }}
       variants={containerVariants}
     >
-      <div className="container">
+      <div className="">
         <motion.div
           className="text-center max-w-3xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
@@ -31,10 +31,10 @@ const Cta = () => {
           transition={{ delay: 0.2, duration: 0.6 }}
           viewport={{ once: true }}
         >
-          <h2 className="text-3xl font-bold mb-4">
+          <h2 className="text-3xl font-bold mb-4 text-white">
             Ready to Transform Your Tax Experience?
           </h2>
-          <p className="text-xl mb-8">
+          <p className="text-xl mb-8 text-white">
             Join thousands of users who have simplified their taxes and
             maximized their savings with TaxMitra.
           </p>
@@ -55,14 +55,14 @@ const Cta = () => {
             <Button
               size="lg"
               variant="outline"
-              className="text-black hover:text-white border-white bg-black/0 hover:bg-white/50"
+              className="text-white hover:text-black border-white bg-black/0 hover:bg-white/50"
             >
               Schedule a Demo
             </Button>
           </motion.div>
 
           <motion.p
-            className="mt-6 text-sm opacity-80"
+            className="mt-6 text-sm opacity-80 text-white"
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             transition={{ delay: 0.6, duration: 0.5 }}
