@@ -45,17 +45,19 @@ export async function POST(req: NextRequest) {
   try {
     const { query, userType } = await req.json();
 
+    console.log(query);
+
     // Validate input
-    if (!query || !userType) {
+    if (!query) {
       return NextResponse.json(
-        { error: "Query and userType are required" },
+        { error: "Query is required" },
         { status: 400 }
       );
     }
 
-    if (!["individual", "corporate", "tax_professional"].includes(userType)) {
-      return NextResponse.json({ error: "Invalid userType" }, { status: 400 });
-    }
+    // if (!["individual", "corporate", "tax_professional"].includes(userType)) {
+    //   return NextResponse.json({ error: "Invalid userType" }, { status: 400 });
+    // }
 
     const model = genAI.getGenerativeModel({
       model: "gemini-2.0-flash-thinking-exp-01-21",
@@ -68,7 +70,7 @@ export async function POST(req: NextRequest) {
     // Generate response
     const prompt = getTaxPrompt(query, userType as UserType);
     const result = await model.generateContent(prompt);
-    const response = await result.response;
+    const response =  result.response;
     const answer = response.text();
 
     return NextResponse.json({

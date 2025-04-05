@@ -24,22 +24,23 @@ export default function ChatBot() {
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
-  const handleSend = () => {
+  const handleSend = async () => {
+    console.log("Hello");
     if (message.trim() === "") return;
     setMessages((prev) => [...prev, { from: "user", text: message }]);
     setMessage("");
     setIsTyping(true);
 
-    setTimeout(() => {
-      setIsTyping(false);
-      setMessages((prev) => [
-        ...prev,
-        {
-          from: "bot",
-          text: "Thanks for your query! 📊 We'll help you with that shortly. Tip: Check if you're eligible for 80C deductions.",
-        },
-      ]);
-    }, 1500);
+    const response = await fetch("/api/chatbot", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: message }),
+    });
+
+    const res = await response.json();
+    console.log(res);
+    setMessages((prev) => [...prev, { from: "bot", text: res.answer }]);
+    setIsTyping(false);
   };
 
   useEffect(() => {
