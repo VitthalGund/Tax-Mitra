@@ -18,11 +18,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import ChatBot from "./bot";
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col ">
       <main className="flex-1 p-20 md:p-32 bg-gradient-to-b  from-white to-teal-50">
+        <ChatBot />
         {/* Hero Section */}
         <section className="relative overflow-hidden ">
           <div className="container relative z-10">
@@ -479,3 +481,13 @@ export default function Home() {
     </div>
   );
 }
+
+const Chat = () => {
+  return (
+    <div className="">
+      <div className="chat-toggler w-20 h-20 rounded-full">
+        <Sparkles />
+      </div>
+    </div>
+  );
+};
