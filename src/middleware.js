@@ -3,11 +3,16 @@ import { NextResponse } from 'next/server';
 
 const isPublicRoute = createRouteMatcher([
   '/sign-in',
-  '/sign-up',
-  '/api/(.*)',
+  '/sign-up'
 ]);
 
 export default clerkMiddleware(async (auth, req) => {
+  // Allow all requests for API routes (bypassing the middleware logic)
+  console.log(req.nextUrl.pathname.includes("/api"))
+  if (req.nextUrl.pathname.includes('/api')) {
+    return NextResponse.next();
+  }
+
   const { userId } = await auth();
   console.log(userId, req.nextUrl.pathname);
 

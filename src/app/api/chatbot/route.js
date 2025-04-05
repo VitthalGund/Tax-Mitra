@@ -19,16 +19,15 @@ const month = [
 ];
 
 // Strong prompt template
-const getTaxPrompt = (query: string) => `
+const getTaxPrompt = (query) => `
 You are an expert tax consultant specializing in Indian tax laws with over 20 years of experience. 
 Your task is to provide accurate, concise, and practical answers related to Indian personal and corporate taxation.
 The user is seeking tax-related information.
 
 Guidelines:
 - Focus exclusively on Indian tax laws (Income Tax Act, GST, Companies Act, etc.).
-- Provide answers that are up-to-date as of ${
-  month[new Date().getMonth()]
-} ${new Date().getFullYear()}.
+- Provide answers that are up-to-date as of ${month[new Date().getMonth()]
+  } ${new Date().getFullYear()}.
 - Use simple language for individuals, technical terms for corporate users, and detailed explanations for tax professionals.
 - If the query is vague, ask clarifying questions within the response.
 - Include relevant section references from Indian tax laws where applicable.
@@ -39,12 +38,12 @@ Answer the query with precision and clarity, tailored to the user's type.
 `;
 
 // API Handler
-export async function POST(req: NextRequest) {
+export async function POST(req) {
   try {
-    const { query, userType } = await req.json();
+    const { query } = await req.json();
 
     // Validate input
-    if (!query || !userType) {
+    if (!query) {
       return NextResponse.json(
         { error: "Query and userType are required" },
         { status: 400 }
