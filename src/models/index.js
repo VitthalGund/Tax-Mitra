@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
 const UserSchema = new Schema({
-    name: { type: String, required: true },
+    name: String,
     email: { type: String, required: true, unique: true },
-    pan: { type: String, required: true, unique: true },
-    aadhaar: { type: String, required: true, unique: true },
-    dob: { type: Date, required: true },
+    gender: { type: String, required: true },
+    pan: String,
+    aadhaar: String,
+    dob: Date,
     address: {
         street: String,
         city: String,
@@ -15,7 +16,10 @@ const UserSchema = new Schema({
         country: String,
     },
     phone: String,
+}, {
+    timestamps: true,
 });
+
 
 const SalaryIncomeSchema = new Schema({
     basicSalary: { type: Number, default: 0 },
@@ -164,7 +168,6 @@ const TaxRecordSchema = new Schema({
     createdAt: { type: Date, default: Date.now }
 });
 
-const User = mongoose.model('User', UserSchema);
-const TaxRecord = mongoose.model('TaxRecord', TaxRecordSchema);
 
-module.exports = { User, TaxRecord };
+export const User = mongoose.models.User || mongoose.model('User', UserSchema);
+export const TaxRecord = mongoose.models.TaxRecord || mongoose.model('TaxRecord', TaxRecordSchema);
