@@ -19,7 +19,7 @@ const month = [
 ];
 
 // Strong prompt template
-const getTaxPrompt = (query: string) => `
+const getTaxPrompt = (query) => `
 You are an expert tax consultant specializing in Indian tax laws with over 20 years of experience. 
 Your task is to provide accurate, concise, and practical answers related to Indian personal and corporate taxation.
 The user is seeking tax-related information.
@@ -39,15 +39,12 @@ Answer the query with precision and clarity, tailored to the user's type.
 `;
 
 // API Handler
-export async function POST(req: NextRequest) {
+export async function POST(req) {
   try {
     const { query } = await req.json();
     // Validate input
     if (!query) {
-      return NextResponse.json(
-        { error: "Query is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Query is required" }, { status: 400 });
     }
 
     const model = genAI.getGenerativeModel({
@@ -61,7 +58,7 @@ export async function POST(req: NextRequest) {
     // Generate response
     const prompt = getTaxPrompt(query);
     const result = await model.generateContent(prompt);
-    const response =  result.response;
+    const response = result.response;
     const answer = response.text();
 
     return NextResponse.json({
@@ -86,7 +83,6 @@ export async function GET() {
     message: "Please use POST method with query and userType",
     example: {
       query: "What are the tax slabs for FY 2024-25?",
-      userType: "individual",
     },
   });
 }

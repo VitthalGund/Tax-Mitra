@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import Markdown from "react-markdown";
 
 export default function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -37,8 +38,8 @@ export default function ChatBot() {
         body: JSON.stringify({ query: message }),
       });
       console.log("passed1");
-      console.log(await response.json());
-      setMessages((prev) => [...prev, { from: "bot", text: "dummy" }]);
+      const res = await response.json();
+      setMessages((prev) => [...prev, { from: "bot", text: res.answer }]);
     } catch (error) {
       console.log(error.stack);
     }
@@ -145,7 +146,11 @@ export default function ChatBot() {
                           : "bg-teal-500 text-white shadow-sm"
                       }`}
                     >
-                      {msg.text}
+                      {msg.from === "bot" ? (
+                        <Markdown>{msg.text}</Markdown>
+                      ) : (
+                        msg.text
+                      )}
                     </div>
                   </motion.div>
                 ))}

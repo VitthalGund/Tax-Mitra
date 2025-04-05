@@ -28,7 +28,7 @@
     ".next/types/**/*.ts",
     "**/*.ts",
     "**/*.tsx"
-, "src/app/step-indicator.jsx", "src/context/form-context.jsx", "src/app/steps/review-submit.jsx", "src/app/steps/personal-details.jsx", "src/app/steps/employment-info.jsx", "src/app/steps/document-uploads.jsx", "src/app/steps/deductions-investments.jsx", "src/app/tax-form/[id]/income/business/page.jsx", "src/app/tax-form/[id]/recommendations/page.jsx", "src/app/tax-form/[id]/personal-info/page.jsx", "src/app/tax-form/[id]/income/other/page.jsx", "src/app/tax-form/[id]/income/salary/page.jsx", "src/app/tax-form/[id]/income/layout.jsx", "src/app/tax-form/[id]/income/investments/page.jsx", "src/app/tax-form/[id]/income/services/page.jsx", "src/app/tax-form/[id]/preview/page.sx"  ],
+, "src/app/step-indicator.jsx", "src/context/form-context.jsx", "src/app/steps/review-submit.jsx", "src/app/steps/personal-details.jsx", "src/app/steps/employment-info.jsx", "src/app/steps/document-uploads.jsx", "src/app/steps/deductions-investments.jsx", "src/app/tax-form/[id]/income/business/page.jsx", "src/app/tax-form/[id]/recommendations/page.jsx", "src/app/tax-form/[id]/personal-info/page.jsx", "src/app/tax-form/[id]/income/other/page.jsx", "src/app/tax-form/[id]/income/salary/page.jsx", "src/app/tax-form/[id]/income/layout.jsx", "src/app/tax-form/[id]/income/investments/page.jsx", "src/app/tax-form/[id]/income/services/page.jsx", "src/app/tax-form/[id]/preview/page.sx", "src/app/api/chatbot/route.js"  ],
   "exclude": [
     "node_modules"
   ]
