@@ -6,16 +6,6 @@ import Link from "next/link";
 import { Input } from "../../components/ui/input";
 import { Button } from "../../components/ui/button";
 import {
-<<<<<<< HEAD
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-=======
     Card,
     CardHeader,
     CardTitle,
@@ -24,7 +14,6 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 } from "../../components/ui/card";
 import { Label } from "../../components/ui/label";
 import { Alert, AlertDescription } from "../../components/ui/alert";
->>>>>>> 241847ee0ee41a48b3e1628fbf29e9b4cf579f65
 import { Eye, EyeOff } from "lucide-react";
 
 export default function SignIn() {

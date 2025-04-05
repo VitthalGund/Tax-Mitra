@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from "@/components/ui/button"
 import { FormSteps } from "../../../../components/tax-form/form-steps"
 
-export default function UserTypePage({ params }: { params: { id: string } }) {
+export default function UserTypePage({ params }) {
   const router = useRouter()
   const [formData, setFormData] = useState<any>(null)
 
@@ -33,7 +33,7 @@ export default function UserTypePage({ params }: { params: { id: string } }) {
     }
   }, [params.id])
 
-  const handleSelect = (type: "individual" | "corporate") => {
+  const handleSelect = () => {
     if (formData) {
       const updatedData = { ...formData, userType: type }
       localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
