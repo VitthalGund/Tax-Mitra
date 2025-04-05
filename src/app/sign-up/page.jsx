@@ -78,7 +78,18 @@ export default function SignUp() {
       });
 
       if (completeSignUp.status === "complete") {
-        await setActive({ session: completeSignUp.createdSessionId });
+          await setActive({ session: completeSignUp.createdSessionId });
+          await fetch("/api/users", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: emailAddress,
+              gender: gender,
+            }),
+          });
+          router.replace('/');
       }
     } catch (err) {
       console.error(JSON.stringify(err, null, 2));
@@ -220,7 +231,7 @@ export default function SignUp() {
                 </Alert>
               )}
 
-              <Button type="submit" className="w-full" disabled={loading}>
+              <Button type="submit" className="w-full bg-gradient-to-tr from-taxmitra-blue to-taxmitra-teal" disabled={loading}>
                 {loading ? "Verifying..." : "Verify"}
               </Button>
             </form>

@@ -26,8 +26,9 @@ The user is seeking tax-related information.
 
 Guidelines:
 - Focus exclusively on Indian tax laws (Income Tax Act, GST, Companies Act, etc.).
-- Provide answers that are up-to-date as of ${month[new Date().getMonth()]
-  } ${new Date().getFullYear()}.
+- Provide answers that are up-to-date as of ${
+  month[new Date().getMonth()]
+} ${new Date().getFullYear()}.
 - Use simple language for individuals, technical terms for corporate users, and detailed explanations for tax professionals.
 - If the query is vague, ask clarifying questions within the response.
 - Include relevant section references from Indian tax laws where applicable.
@@ -41,13 +42,9 @@ Answer the query with precision and clarity, tailored to the user's type.
 export async function POST(req) {
   try {
     const { query } = await req.json();
-
     // Validate input
     if (!query) {
-      return NextResponse.json(
-        { error: "Query and userType are required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Query is required" }, { status: 400 });
     }
 
     const model = genAI.getGenerativeModel({
@@ -61,7 +58,7 @@ export async function POST(req) {
     // Generate response
     const prompt = getTaxPrompt(query);
     const result = await model.generateContent(prompt);
-    const response = await result.response;
+    const response = result.response;
     const answer = response.text();
 
     return NextResponse.json({
@@ -85,7 +82,7 @@ export async function GET() {
   return NextResponse.json({
     message: "Please use POST method with query and userType",
     example: {
-      query: "What are the tax slabs for FY 2024-25?"
+      query: "What are the tax slabs for FY 2024-25?",
     },
   });
 }

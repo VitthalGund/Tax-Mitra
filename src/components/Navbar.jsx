@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useUser, useClerk, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import {
+  useUser,
+  useClerk,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 import { Button } from "../components/ui/button";
 import { Menu, X } from "lucide-react";
 import useGoogleTranslate from "../hooks/useGoogleTranslate";
@@ -37,7 +43,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <span className="text-2xl font-bold bg-gradient-to-r from-taxmitra-blue to-taxmitra-teal bg-clip-text text-transparent">
-              <Link href={'/'}>TaxMitra</Link>
+              <Link href={"/"}>TaxMitra</Link>
             </span>
           </div>
 
@@ -48,7 +54,7 @@ export default function Navbar() {
               "#how-it-works",
               "#testimonials",
               "#faq",
-              "Schedule a call",
+              "/Schedule-a-Call",
             ].map((href, i) => (
               <a
                 key={i}
@@ -58,6 +64,7 @@ export default function Navbar() {
                 {href
                   .replace("#", "")
                   .replace("-", " ")
+                  .replace("/", "")
                   .replace(/\b\w/g, (l) => l.toUpperCase())}
               </a>
             ))}

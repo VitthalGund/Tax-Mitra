@@ -1,15 +1,12 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-const isPublicRoute = createRouteMatcher([
-  '/sign-in',
-  '/sign-up'
-]);
+const isPublicRoute = createRouteMatcher(["/sign-in", "/sign-up"]);
 
 export default clerkMiddleware(async (auth, req) => {
   // Allow all requests for API routes (bypassing the middleware logic)
-  console.log(req.nextUrl.pathname.includes("/api"))
-  if (req.nextUrl.pathname.includes('/api')) {
+  console.log(req.nextUrl.pathname.includes("/api"));
+  if (req.nextUrl.pathname.includes("/api")) {
     return NextResponse.next();
   }
 
@@ -18,12 +15,12 @@ export default clerkMiddleware(async (auth, req) => {
 
   // If the user is authenticated and is on a public route, redirect to home
   if (userId && isPublicRoute(req)) {
-    return NextResponse.redirect(new URL('/', req.url));
+    return NextResponse.redirect(new URL("/", req.url));
   }
 
   // If the user is not authenticated and the route is not public, redirect to /sign-in
-  if (!userId && !isPublicRoute(req) && req.nextUrl.pathname !== '/') {
-    return NextResponse.redirect(new URL('/sign-in', req.url));
+  if (!userId && !isPublicRoute(req) && req.nextUrl.pathname !== "/") {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
   // Allow the request to continue if none of the above conditions match
@@ -32,7 +29,7 @@ export default clerkMiddleware(async (auth, req) => {
 
 export const config = {
   matcher: [
-    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
-    '/(api|trpc)(.*)',  // Ensure this handles your API routes
+    "/((?!_next|[^?]\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).)",
+    "/(api|trpc)(.*)", // Ensure this handles your API routes
   ],
-}
+};
