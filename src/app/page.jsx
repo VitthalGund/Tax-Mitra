@@ -22,9 +22,9 @@ import {
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col ">
-      <main className="flex-1 p-20 md:p-32">
+      <main className="flex-1 p-20 md:p-32 bg-gradient-to-b  from-white to-teal-50">
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-b  from-white to-teal-50">
+        <section className="relative overflow-hidden ">
           <div className="container relative z-10">
             <div className="grid gap-12 md:grid-cols-2 md:gap-16 items-center">
               <div className="flex flex-col gap-6">
@@ -37,12 +37,14 @@ export default function Home() {
                   automates tax filing in compliance with local regulations.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                  <Button
-                    size="lg"
-                    className="bg-gradient-to-r from-taxmitra-blue to-taxmitra-teal hover:from-taxmitra-teal hover:to-taxmitra-blue"
-                  >
-                    Get Started <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                  <Link href={"/onboard"}>
+                    <Button
+                      size="lg"
+                      className="bg-gradient-to-r from-taxmitra-blue to-taxmitra-teal hover:from-taxmitra-teal hover:to-taxmitra-blue"
+                    >
+                      Get Started <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>{" "}
+                  </Link>
                   <Button size="lg" variant="outline">
                     Chat with TaxMitra{" "}
                     <MessageSquare className="ml-2 h-4 w-4" />

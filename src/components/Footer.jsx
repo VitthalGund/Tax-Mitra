@@ -1,12 +1,12 @@
-import { Sparkles } from 'lucide-react';
-import React from 'react'
+import { Sparkles } from "lucide-react";
+import React from "react";
 
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300 py-12">
-      <div className="container">
-        <div className="grid gap-8 md:grid-cols-4">
-          <div>
+      <div className="mx-24">
+        <div className="grid gap-8 md:grid-cols-4 ">
+          <div className="">
             <div className="flex items-center gap-2 mb-4">
               <Sparkles className="h-6 w-6 text-teal-400" />
               <span className="text-xl font-bold text-white">TaxMitra</span>
