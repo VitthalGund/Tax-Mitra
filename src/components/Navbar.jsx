@@ -54,7 +54,7 @@ export default function Navbar() {
               "#how-it-works",
               "#testimonials",
               "#faq",
-              "Schedule a call",
+              "/Schedule-a-Call",
             ].map((href, i) => (
               <a
                 key={i}
@@ -64,6 +64,7 @@ export default function Navbar() {
                 {href
                   .replace("#", "")
                   .replace("-", " ")
+                  .replace("/", "")
                   .replace(/\b\w/g, (l) => l.toUpperCase())}
               </a>
             ))}
