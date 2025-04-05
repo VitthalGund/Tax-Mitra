@@ -19,30 +19,18 @@
     "@radix-ui/react-slot": "^1.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-<<<<<<< HEAD
-    "custom_signup": "file:",
-    "framer-motion": "^12.6.3",
-    "lucide-react": "^0.473.0",
-    "mongoose": "^8.13.2",
-    "next": "15.1.5",
-=======
     "framer-motion": "^12.6.3",
     "lucide-react": "^0.473.0",
     "mongoose": "^8.13.2",
     "next": "^15.2.3",
     "radix-ui": "^1.1.3",
->>>>>>> 206cc11d7258e5b1edfa9faec949461370b34658
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.55.0",
     "tailwind-merge": "^2.6.0",
     "tailwindcss-animate": "^1.0.7",
-<<<<<<< HEAD
-    "uuid": "^11.1.0"
-=======
     "uuid": "^11.1.0",
     "zod": "^3.24.2"
->>>>>>> 206cc11d7258e5b1edfa9faec949461370b34658
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
