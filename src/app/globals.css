@@ -75,9 +75,10 @@ body {
 
 
 #google_translate_element select {
-  background-color: #f6edfd;
-  color: #383ffa;
+  background-color: #ffffff;
+  color: #0f0f12;
   border-radius: 6px;
+  border: 0.5px solid #e4e4e7;
   padding: 8px 12px;
   font-size: 14px;
   font-weight: 600;
@@ -107,6 +108,12 @@ body {
   display: none !important;
 }
 
-body > .skiptranslate {
+body >.skiptranslate {
   display: none !important;
+}
+
+.goog-te-banner-frame.skiptranslate,
+.goog-te-gadget .goog-te-combo + div,
+.goog-te-gadget .goog-te-gadget-simple a {
+    display: none !important;
 }
