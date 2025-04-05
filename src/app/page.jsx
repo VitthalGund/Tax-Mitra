@@ -440,7 +440,7 @@ export default function Home() {
         </section>
 
         {/* CTA Section */}
-        <section className="py-20 bg-teal-600 text-white">
+        <section className="py-20 bg-teal-600 rounded-lg text-white">
           <div className="container">
             <div className="text-center max-w-3xl mx-auto">
               <h2 className="text-3xl font-bold mb-4">
