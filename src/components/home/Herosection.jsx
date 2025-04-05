@@ -32,7 +32,7 @@ export default function Herosection() {
     );
 
     // Navigate to the user type selection page with the session ID
-    router.push(`/tax-form/${sessionId}/ user-type`);
+    router.push(`/tax-form/${sessionId}/user-type`);
   };
   return (
     <section className="relative overflow-hidden">
