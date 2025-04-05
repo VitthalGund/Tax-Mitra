@@ -63,6 +63,7 @@ export default function SignUp() {
           lang,
         },
       });
+
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
       setPendingVerification(true);
     } catch (err) {
