@@ -17,11 +17,7 @@
     "@radix-ui/react-slot": "^1.1.1",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-<<<<<<< HEAD
-    "custom_signup": "link:",
     "framer-motion": "^12.6.3",
-=======
->>>>>>> 241847ee0ee41a48b3e1628fbf29e9b4cf579f65
     "lucide-react": "^0.473.0",
     "mongoose": "^8.13.2",
     "next": "^15.2.3",
@@ -36,11 +32,7 @@
     "@eslint/eslintrc": "^3",
     "@types/node": "22.14.0",
     "@types/react": "19.1.0",
-<<<<<<< HEAD
-    "eslint": "^9",
-=======
     "eslint": "^7.32.0",
->>>>>>> 241847ee0ee41a48b3e1628fbf29e9b4cf579f65
     "eslint-config-next": "15.1.5",
     "postcss": "^8",
     "tailwindcss": "^3.4.1"

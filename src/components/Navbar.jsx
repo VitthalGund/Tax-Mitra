@@ -38,11 +38,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <span className="text-2xl font-bold bg-gradient-to-r from-taxmitra-blue to-taxmitra-teal bg-clip-text text-transparent">
-<<<<<<< HEAD
-              <Link href={"/"}>TaxMitra</Link>
-=======
               <Link href={'/'}>TaxMitra</Link>
->>>>>>> 241847ee0ee41a48b3e1628fbf29e9b4cf579f65
             </span>
           </div>
 
@@ -87,10 +83,6 @@ export default function Navbar() {
               onClick={openLangDropdown}
             >
               <div id="google_translate_element" className="hidden md:block" />
-<<<<<<< HEAD
-=======
-
->>>>>>> 241847ee0ee41a48b3e1628fbf29e9b4cf579f65
             </div>
           </div>
 
@@ -145,10 +137,6 @@ export default function Navbar() {
                 onClick={openLangDropdown}
               >
                 <div id="google_translate_element" />
-<<<<<<< HEAD
-=======
-
->>>>>>> 241847ee0ee41a48b3e1628fbf29e9b4cf579f65
               </div>
             </div>
           </div>
