@@ -135,3 +135,6 @@ dist
 .yarn/install-state.gz
 .pnp.*
 .qodo
+
+# clerk configuration (can include secrets)
+/.clerk/
