@@ -1,10 +1,10 @@
 "use client";
-import HowItWorks from "@/components/Home/howitworks";
-import Herosection from "@/components/Home/Herosection";
-import Fetures from "@/components/Home/Fetures";
-import Testimonial from "@/components/Home/Testimonial";
-import UserSpecificBenifit from "@/components/Home/UserSpecificBenifit";
-import Cta from "@/components/Home/CTA";
+import HowItWorks from "../components/home/howitworks";
+import Herosection from "../components/home/Herosection";
+import Fetures from "../components/home/Fetures";
+import Testimonial from "../components/home/Testimonial";
+import UserSpecificBenifit from "../components/home/UserSpecificBenifit";
+import Cta from "../components/home/Cta";
 import ChatBot from "./bot";
 
 export default function Home() {
