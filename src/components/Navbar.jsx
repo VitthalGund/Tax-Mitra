@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
 import {
   useUser,
   useClerk,
@@ -10,11 +9,7 @@ import {
   SignedOut,
   UserButton,
 } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
-=======
-import { useUser, useClerk, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { Button } from "../components/ui/button";
->>>>>>> 206cc11d7258e5b1edfa9faec949461370b34658
 import { Menu, X } from "lucide-react";
 import useGoogleTranslate from "../hooks/useGoogleTranslate";
 
@@ -27,10 +22,6 @@ export default function Navbar() {
   useEffect(() => {
     const observer = new MutationObserver(() => {
       const lang = document.querySelector(".goog-te-combo")?.value;
-<<<<<<< HEAD
-=======
-
->>>>>>> 206cc11d7258e5b1edfa9faec949461370b34658
     });
     const el = document.getElementById("google_translate_element");
     if (el) observer.observe(el, { childList: true, subtree: true });
@@ -52,7 +43,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <span className="text-2xl font-bold bg-gradient-to-r from-taxmitra-blue to-taxmitra-teal bg-clip-text text-transparent">
-              <Link href={'/'}>TaxMitra</Link>
+              <Link href={"/"}>TaxMitra</Link>
             </span>
           </div>
 
