@@ -44,21 +44,29 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            {["#features", "#how-it-works", "#testimonials", "#faq"].map((href, i) => (
-              <a
-                key={i}
-                href={href}
-                className="text-gray-600 hover:text-taxmitra-blue transition-colors"
-              >
-                {href.replace("#", "").replace("-", " ").replace(/\b\w/g, l => l.toUpperCase())}
-              </a>
-            ))}
+            {["#features", "#how-it-works", "#testimonials", "#faq"].map(
+              (href, i) => (
+                <a
+                  key={i}
+                  href={href}
+                  className="text-gray-600 hover:text-taxmitra-blue transition-colors"
+                >
+                  {href
+                    .replace("#", "")
+                    .replace("-", " ")
+                    .replace(/\b\w/g, (l) => l.toUpperCase())}
+                </a>
+              )
+            )}
           </nav>
 
           {/* Right Section */}
           <div className="hidden md:flex items-center space-x-4">
             <SignedOut>
-              <Button variant="outline" className="border-taxmitra-blue text-taxmitra-blue hover:bg-taxmitra-blue/10">
+              <Button
+                variant="outline"
+                className="border-taxmitra-blue text-taxmitra-blue hover:bg-taxmitra-blue/10"
+              >
                 <Link href="/sign-in">Log In</Link>
               </Button>
               <Button className="bg-gradient-to-r from-taxmitra-blue to-taxmitra-teal text-white hover:opacity-90">
@@ -70,15 +78,19 @@ export default function Navbar() {
             </SignedIn>
 
             {/* Language dropdown */}
-            <div className="flex items-center gap-2 cursor-pointer" onClick={openLangDropdown}>
-              <span className="text-xl">🌐</span>
+            <div
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={openLangDropdown}
+            >
               <div id="google_translate_element" className="hidden md:block" />
-
             </div>
           </div>
 
           {/* Mobile Menu Button */}
-          <button className="md:hidden text-gray-600" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button
+            className="md:hidden text-gray-600"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+          >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -87,20 +99,28 @@ export default function Navbar() {
         {isMenuOpen && (
           <div className="md:hidden py-4 animate-fade-in">
             <nav className="flex flex-col space-y-4">
-              {["#features", "#how-it-works", "#testimonials", "#faq"].map((href, i) => (
-                <a
-                  key={i}
-                  href={href}
-                  className="text-gray-600 hover:text-taxmitra-blue transition-colors"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {href.replace("#", "").replace("-", " ").replace(/\b\w/g, l => l.toUpperCase())}
-                </a>
-              ))}
+              {["#features", "#how-it-works", "#testimonials", "#faq"].map(
+                (href, i) => (
+                  <a
+                    key={i}
+                    href={href}
+                    className="text-gray-600 hover:text-taxmitra-blue transition-colors"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {href
+                      .replace("#", "")
+                      .replace("-", " ")
+                      .replace(/\b\w/g, (l) => l.toUpperCase())}
+                  </a>
+                )
+              )}
             </nav>
             <div className="flex flex-col space-y-2 mt-4">
               <SignedOut>
-                <Button variant="outline" className="border-taxmitra-blue text-taxmitra-blue hover:bg-taxmitra-blue/10 w-full">
+                <Button
+                  variant="outline"
+                  className="border-taxmitra-blue text-taxmitra-blue hover:bg-taxmitra-blue/10 w-full"
+                >
                   <Link href="/sign-in">Log In</Link>
                 </Button>
                 <Button className="bg-gradient-to-r from-taxmitra-blue to-taxmitra-teal text-white hover:opacity-90 w-full">
@@ -112,10 +132,11 @@ export default function Navbar() {
               </SignedIn>
 
               {/* Language dropdown in mobile */}
-              <div className="flex items-center gap-2 mt-2 cursor-pointer" onClick={openLangDropdown}>
-                <span className="text-xl">🌐</span>
+              <div
+                className="flex items-center gap-2 mt-2 cursor-pointer"
+                onClick={openLangDropdown}
+              >
                 <div id="google_translate_element" />
-
               </div>
             </div>
           </div>
