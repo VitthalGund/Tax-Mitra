@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+<<<<<<< HEAD
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -22,6 +23,20 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+=======
+import { Input } from "../../components/ui/input";
+import { Button } from "../../components/ui/button";
+import { Alert, AlertDescription } from "../../components/ui/alert";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select";
+import {
+    Card,
+    CardHeader,
+    CardTitle,
+    CardContent,
+    CardFooter,
+} from "../../components/ui/card";
+import { Label } from "../../components/ui/label";
+>>>>>>> 241847ee0ee41a48b3e1628fbf29e9b4cf579f65
 import { Eye, EyeOff } from "lucide-react";
 
 export default function SignUp() {
