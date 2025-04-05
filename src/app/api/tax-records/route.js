@@ -55,12 +55,100 @@ export async function POST(req) {
 
     // Detailed prompt
     const prompt = `
-      You are a Chartered Accountant specializing in Indian tax laws (FY 2023-24). Analyze:
-      - Name: ${user.name}
-      - Age: ${age}
-      - Gender: ${email}
-      - Location: ${user.address.city}, ${user.address.state}, India
-      - Income: ${JSON.stringify({
+You are a Chartered Accountant specializing in Indian tax laws (FY 2023-24). Analyze the following user data and produce a personalized tax-saving plan. Follow these steps carefully:
+
+1. **Tax Calculations:**
+   - Calculate the user's gross total income from all sources.
+   - Compute the taxable income under both the Old and New Regimes.
+     - **Old Regime:** Include full deductions (e.g., standard deduction, 80C, 80D, 80CCD(1B), 80TTA, etc.) and exemptions (e.g., HRA).
+     - **New Regime:** Apply limited deductions and any applicable rebate (e.g., under section 87A).
+   - Compute tax liability (including cess) for both regimes.
+
+2. **Recommendations:**
+   - Compare both regimes and recommend the one with the lower tax liability.
+   - Provide a breakdown of recommended deductions, exemptions, and rebates.
+   - For **investment options**, list specific options (e.g., PPF, NPS, Sukanya Samriddhi) and for each, calculate and include:
+     - The **recommended investment amount** based on the user's income and tax liability.
+     - The expected tax benefit.
+   - Provide clear reasoning for your recommendations.
+
+3. **Output Format:**
+   - Return your response strictly in JSON format as specified below.
+   - Do not include any extra commentary or text outside the JSON.
+
+**JSON Structure:**
+
+{
+  "taxCalculations": {
+    "oldRegime": {
+      "grossTotalIncome": number,
+      "deductions": {
+        "standardDeduction": number,
+        "professionalTax": number,
+        "otherSalaryDeductions": number,
+        "80C": number,
+        "80D": number,
+        "80CCD(1B)": number,
+        "80TTA": number
+      },
+      "exemptions": {
+        "HRA": number
+      },
+      "taxableIncome": number,
+      "taxBeforeCess": number,
+      "cess": number,
+      "totalTax": number
+    },
+    "newRegime": {
+      "grossTotalIncome": number,
+      "deductions": {
+        "professionalTax": number,
+        "otherSalaryDeductions": number
+      },
+      "taxableIncome": number,
+      "taxBeforeCess": number,
+      "rebate87A": number,
+      "cess": number,
+      "totalTax": number
+    }
+  },
+  "recommendations": {
+    "deductions": {
+      "80C": number,
+      "80D": number,
+      "80CCD(1B)": number,
+      "80TTA": number
+    },
+    "exemptions": {
+      "HRA": number,
+      "standard": number
+    },
+    "rebates": {
+      "87A": number
+    },
+    "investmentOptions": [
+      {
+        "name": string,
+        "recommendedInvestmentAmount": number,
+        "taxBenefit": number,
+        "section": string
+      }
+    ],
+    "recommendedRegime": "old" or "new",
+    "finalTaxLiability": number,
+    "taxSaved": number,
+    "reasoning": string
+  },
+  "computedOn": string // ISO date string
+}
+
+User Data:
+- Name: ${user.name}
+- Age: ${age}
+- Gender: ${user.gender}
+- Location: ${user.address.city}, ${user.address.state}, India
+- Financial Year: ${financialYear}
+- Income: ${JSON.stringify({
         salary: salaryIncome,
         business: businessIncome,
         investment: investmentIncome,
@@ -68,18 +156,10 @@ export async function POST(req) {
         other: otherIncome
     })}
 
-      Tax Rules:
-      - Old Regime: 5% (₹2.5L-5L), 20% (₹5L-10L), 30% (>₹10L); Full deductions.
-      - New Regime: 5% (₹3L-6L), 10% (₹6L-9L), 15% (₹9L-12L), 20% (₹12L-15L), 30% (>₹15L); Limited deductions.
-      - Deductions: 80C (₹1.5L), 80D (₹25K/50K), 80CCD(1B) (₹50K), 80TTA (₹10K), 80TTB (₹50K for seniors).
-      - Exemptions: HRA, standard deduction (₹50K).
-      - Rebate: 87A (₹25K if income ≤ ₹7L in new regime).
 
-      Provide in JSON:
-      1. Tax calculations (old and new regimes).
-      2. Deductions, exemptions, rebates, and investment options (e.g., PPF, NPS, Sukanya Samriddhi).
-      3. Recommended regime, final tax liability, tax saved, and reasoning.
-    `;
+Provide your output strictly in the JSON format described above.
+`;
+
 
     const result = await model.generateContent(prompt);
     const cleanJsonResponse = (response) => {
