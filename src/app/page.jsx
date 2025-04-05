@@ -101,15 +101,16 @@ export default function Home() {
                   <div className="border-t pt-4">
                     <div className="relative">
                       <input
+                        disabled={true}
                         type="text"
                         placeholder="Ask about your taxes..."
                         className="w-full rounded-full border border-gray-300 py-2 pl-4 pr-10 focus:border-teal-500 focus:outline-none focus:ring-1 focus:ring-teal-500"
                       />
                       <Button
                         size="sm"
-                        className="absolute right-1 top-1 h-7 w-7 rounded-full p-0 bg-teal-600"
+                        className="absolute right-2 top-[6.2px] h-7 w-7 rounded-full p-0 bg-teal-600"
                       >
-                        <ArrowRight className="h-4 w-4" />
+                        <ArrowRight className="h-4 w-4  " />
                         <span className="sr-only">Send</span>
                       </Button>
                     </div>
@@ -455,7 +456,7 @@ export default function Home() {
                   size="lg"
                   className="bg-white text-teal-600 hover:bg-gray-100"
                 >
-                  Start Free Trial
+                  Start from now
                 </Button>
                 <Button
                   size="lg"
