@@ -53,7 +53,7 @@ export async function PUT(req) {
 
     if (!email) {
       return NextResponse.json(
-        { error: "Email query param required to update user" },
+        { error: "Email query param required to update user" , res1:body, res: parsed, email:email},
         { status: 400 }
       );
     }

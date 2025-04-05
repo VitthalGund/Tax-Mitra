@@ -100,13 +100,44 @@ export default function PersonalInfoPage({ params }) {
     }
   }, [unwrappedParams.id, router, form]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (formData) {
+      console.log(formData);
       const updatedData = { ...formData, personalInfo: data };
       localStorage.setItem(
         `taxmitra-${unwrappedParams.id}`,
         JSON.stringify(updatedData)
       );
+      await fetch(
+        `/api/users?email=${encodeURIComponent(formData.personalInfo.email)}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            name: formData.personalInfo.name,
+            dob: formData.personalInfo.dob,
+            pan: formData.personalInfo.pan,
+            phone: formData.personalInfo.mobile,
+            address: {
+              street: formData.personalInfo.street,
+              city: formData.personalInfo.city,
+              state: formData.personalInfo.state,
+              postalCode: formData.personalInfo.pincode,
+              residentialStatus: formData.personalInfo.residentialStatus,
+              country: "India", // Hardcoded is fine unless you want to make it dynamic
+            },
+          }),
+        }
+      ).then((res) => {
+        if (res.status === 200) {
+          console.log("User updated successfully");
+        } else {
+          console.error("Failed to update user data");
+        }
+      });
+
       router.push(`/tax-form/${unwrappedParams.id}/income/salary`);
     }
   };
