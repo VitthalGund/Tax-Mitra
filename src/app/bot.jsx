@@ -25,22 +25,25 @@ export default function ChatBot() {
   const inputRef = useRef(null);
 
   const handleSend = async () => {
-    console.log("Hello");
     if (message.trim() === "") return;
     setMessages((prev) => [...prev, { from: "user", text: message }]);
     setMessage("");
     setIsTyping(true);
 
-    const response = await fetch("/api/chatbot", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query: message }),
-    });
-
-    const res = await response.json();
-    console.log(res);
-    setMessages((prev) => [...prev, { from: "bot", text: res.answer }]);
+    try {
+      const response = await fetch("/api/chatbot", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: message }),
+      });
+      console.log("passed1");
+      console.log(await response.json());
+      setMessages((prev) => [...prev, { from: "bot", text: "dummy" }]);
+    } catch (error) {
+      console.log(error.stack);
+    }
     setIsTyping(false);
+    setMessage("");
   };
 
   useEffect(() => {

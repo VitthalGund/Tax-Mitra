@@ -41,10 +41,7 @@ Answer the query with precision and clarity, tailored to the user's type.
 // API Handler
 export async function POST(req: NextRequest) {
   try {
-    const { query, userType } = await req.json();
-
-    console.log(query);
-
+    const { query } = await req.json();
     // Validate input
     if (!query) {
       return NextResponse.json(
@@ -70,7 +67,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({
       success: true,
       answer,
-      userType,
       query,
     });
   } catch (error) {
