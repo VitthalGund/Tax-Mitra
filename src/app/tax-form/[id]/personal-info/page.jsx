@@ -138,7 +138,7 @@ export default function PersonalInfoPage({ params }) {
         }
       });
 
-      // router.push(`/tax-form/${unwrappedParams.id}/income/salary`);
+      router.push(`/tax-form/${unwrappedParams.id}/income/salary`);
     }
   };
 
