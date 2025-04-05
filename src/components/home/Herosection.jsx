@@ -77,9 +77,9 @@ export default function Herosection() {
                 Get Started <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
 
-              <Button size="lg" variant="outline">
+              {/* <Button size="lg" variant="outline">
                 Chat with TaxMitra <MessageSquare className="ml-2 h-4 w-4" />
-              </Button>
+              </Button> */}
             </motion.div>
           </motion.div>
 
