@@ -32,40 +32,42 @@ export default function SignUp() {
   const [code, setCode] = useState("");
   const [error, setError] = useState("");
   const [gender, setGender] = useState("");
-  const [age, setAge] = useState(Date.now());
+  const [age, setAge] = useState("");
+  const [phone, setPhone] = useState("");
+  const [lang, setLang] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
-  if (!isLoaded) {
-    return null;
-  }
+  if (!isLoaded) return null;
 
   async function submit(e) {
     e.preventDefault();
+    setError("");
     setLoading(true);
 
-    if (!isLoaded) return;
-    if (!gender || !age) {
-      setError("Please select your gender and enter your age.");
+    if (!gender || !age || !lang || !phone) {
+      setError("All fields are required.");
       setLoading(false);
       return;
     }
 
     try {
-      const user = await signUp.create({
+      await signUp.create({
         emailAddress,
         password,
         unsafeMetadata: {
-          gender: gender,
-          age: age,
+          gender,
+          age,
+          phone,
+          lang,
         },
       });
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
       setPendingVerification(true);
     } catch (err) {
       console.error(JSON.stringify(err, null, 2));
-      setError(err.errors[0].message);
+      setError(err.errors?.[0]?.message || "Something went wrong.");
     } finally {
       setLoading(false);
     }
@@ -74,12 +76,6 @@ export default function SignUp() {
   async function onPressVerify(e) {
     e.preventDefault();
     setLoading(true);
-
-    if (!isLoaded) {
-      setError("System not loaded. Please try again later.");
-      setLoading(false);
-      return;
-    }
 
     try {
       const completeSignUp = await signUp.attemptEmailAddressVerification({
@@ -91,14 +87,14 @@ export default function SignUp() {
       }
     } catch (err) {
       console.error(JSON.stringify(err, null, 2));
-      setError(err.errors[0].message);
+      setError(err.errors?.[0]?.message || "Verification failed.");
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-background">
+    <div className="flex items-center justify-center min-h-screen bg-background mt-20">
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">
@@ -118,6 +114,7 @@ export default function SignUp() {
                   required
                 />
               </div>
+
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>
                 <div className="relative">
@@ -141,18 +138,21 @@ export default function SignUp() {
                   </button>
                 </div>
               </div>
+
               <div className="space-y-2">
                 <Label htmlFor="gender">Gender</Label>
-                <Select onValueChange={setGender} required>
+                <Select onValueChange={setGender}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select your gender" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="male">Male</SelectItem>
                     <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
+
               <div className="space-y-2">
                 <Label htmlFor="age">DOB</Label>
                 <Input
@@ -163,11 +163,41 @@ export default function SignUp() {
                   required
                 />
               </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="phone">Phone Number</Label>
+                <Input
+                  type="tel"
+                  id="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  placeholder="e.g. +919999999999"
+                  required
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="lang">Preferred Language</Label>
+                <Select onValueChange={setLang}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="english">English</SelectItem>
+                    <SelectItem value="hindi">Hindi</SelectItem>
+                    <SelectItem value="marathi">Marathi</SelectItem>
+                    <SelectItem value="gujarati">Gujarati</SelectItem>
+                    <SelectItem value="bengali">Bengali</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
               {error && (
                 <Alert variant="destructive">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
+
               <Button
                 type="submit"
                 className="w-full bg-gradient-to-r from-taxmitra-blue to-taxmitra-teal text-white hover:opacity-90"
@@ -188,11 +218,13 @@ export default function SignUp() {
                   required
                 />
               </div>
+
               {error && (
                 <Alert variant="destructive">
                   <AlertDescription>{error}</AlertDescription>
                 </Alert>
               )}
+
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? "Verifying..." : "Verify"}
               </Button>

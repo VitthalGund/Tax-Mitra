@@ -26,6 +26,7 @@ const HowItWorks = () => {
 
   return (
     <motion.section
+      id="how-it-works"
       className="py-16"
       initial="hidden"
       whileInView="visible"

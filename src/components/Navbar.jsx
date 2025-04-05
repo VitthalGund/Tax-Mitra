@@ -2,7 +2,13 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { useUser, useClerk, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import {
+  useUser,
+  useClerk,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import useGoogleTranslate from "@/hooks/useGoogleTranslate";
@@ -16,7 +22,6 @@ export default function Navbar() {
   useEffect(() => {
     const observer = new MutationObserver(() => {
       const lang = document.querySelector(".goog-te-combo")?.value;
-     
     });
     const el = document.getElementById("google_translate_element");
     if (el) observer.observe(el, { childList: true, subtree: true });
@@ -44,20 +49,24 @@ export default function Navbar() {
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex space-x-8">
-            {["#features", "#how-it-works", "#testimonials", "#faq"].map(
-              (href, i) => (
-                <a
-                  key={i}
-                  href={href}
-                  className="text-gray-600 hover:text-taxmitra-blue transition-colors"
-                >
-                  {href
-                    .replace("#", "")
-                    .replace("-", " ")
-                    .replace(/\b\w/g, (l) => l.toUpperCase())}
-                </a>
-              )
-            )}
+            {[
+              "#features",
+              "#how-it-works",
+              "#testimonials",
+              "#faq",
+              "Schedule a call",
+            ].map((href, i) => (
+              <a
+                key={i}
+                href={href}
+                className="text-gray-600 hover:text-taxmitra-blue transition-colors"
+              >
+                {href
+                  .replace("#", "")
+                  .replace("-", " ")
+                  .replace(/\b\w/g, (l) => l.toUpperCase())}
+              </a>
+            ))}
           </nav>
 
           {/* Right Section */}

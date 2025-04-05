@@ -66,7 +66,7 @@ export default function Fetures() {
       icon: <Calendar className="h-10 w-10 text-teal-400 mb-2" />,
       title: "Personalized Financial Insights",
       description:
-        "Gain valuable insights into your financial health with custom reports and recommendations tailored to your unique situation.",
+        "Gain valuable insights into financial health with custom reports and recommendations tailored to unique situation.",
     },
   ];
 
@@ -93,7 +93,9 @@ export default function Fetures() {
               <Card className="overflow-hidden group  hover:bg-gradient-to-tr hover:from-taxmitra-blue hover:to-taxmitra-teal ease-in-out duration-1000 shadow-lg transition-transform  hover:scale-[1.02]">
                 <CardHeader className="pb-2 group-hover:text-white">
                   {feature.icon}
-                  <CardTitle className='group-hover:text-white'>{feature.title}</CardTitle>
+                  <CardTitle className="group-hover:text-white">
+                    {feature.title}
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
                   <CardDescription className="text-base group-hover:text-white">
