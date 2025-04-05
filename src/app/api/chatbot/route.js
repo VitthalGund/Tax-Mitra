@@ -3,8 +3,6 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
 
-type UserType = "individual" | "corporate" | "tax_professional";
-
 const month = [
   "January",
   "February",
@@ -21,10 +19,10 @@ const month = [
 ];
 
 // Strong prompt template
-const getTaxPrompt = (query: string, userType: UserType) => `
+const getTaxPrompt = (query) => `
 You are an expert tax consultant specializing in Indian tax laws with over 20 years of experience. 
 Your task is to provide accurate, concise, and practical answers related to Indian personal and corporate taxation.
-The user is a ${userType} seeking tax-related information.
+The user is seeking tax-related information.
 
 Guidelines:
 - Focus exclusively on Indian tax laws (Income Tax Act, GST, Companies Act, etc.).
@@ -41,20 +39,12 @@ Answer the query with precision and clarity, tailored to the user's type.
 `;
 
 // API Handler
-export async function POST(req: NextRequest) {
+export async function POST(req) {
   try {
-    const { query, userType } = await req.json();
-
+    const { query } = await req.json();
     // Validate input
-    if (!query || !userType) {
-      return NextResponse.json(
-        { error: "Query and userType are required" },
-        { status: 400 }
-      );
-    }
-
-    if (!["individual", "corporate", "tax_professional"].includes(userType)) {
-      return NextResponse.json({ error: "Invalid userType" }, { status: 400 });
+    if (!query) {
+      return NextResponse.json({ error: "Query is required" }, { status: 400 });
     }
 
     const model = genAI.getGenerativeModel({
@@ -66,15 +56,14 @@ export async function POST(req: NextRequest) {
     });
 
     // Generate response
-    const prompt = getTaxPrompt(query, userType as UserType);
+    const prompt = getTaxPrompt(query);
     const result = await model.generateContent(prompt);
-    const response = await result.response;
+    const response = result.response;
     const answer = response.text();
 
     return NextResponse.json({
       success: true,
       answer,
-      userType,
       query,
     });
   } catch (error) {
@@ -94,7 +83,6 @@ export async function GET() {
     message: "Please use POST method with query and userType",
     example: {
       query: "What are the tax slabs for FY 2024-25?",
-      userType: "individual",
     },
   });
 }
