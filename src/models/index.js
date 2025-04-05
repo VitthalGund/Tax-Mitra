@@ -4,6 +4,11 @@ const { v4: uuidv4 } = require('uuid');
 
 
 const UserSchema = new Schema({
+    uui: {
+        type: String,
+        default: uuidv4,
+        index: true,
+    },
     name: String,
     email: { type: String, required: true, unique: true },
     gender: { type: String, required: true },

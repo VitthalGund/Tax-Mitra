@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useUser, useClerk, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { Button } from "@/components/ui/button";
+import { Button } from "../components/ui/button";
 import { Menu, X } from "lucide-react";
-import useGoogleTranslate from "@/hooks/useGoogleTranslate";
+import useGoogleTranslate from "../hooks/useGoogleTranslate";
 
 export default function Navbar() {
   useGoogleTranslate();
@@ -16,7 +16,7 @@ export default function Navbar() {
   useEffect(() => {
     const observer = new MutationObserver(() => {
       const lang = document.querySelector(".goog-te-combo")?.value;
-     
+
     });
     const el = document.getElementById("google_translate_element");
     if (el) observer.observe(el, { childList: true, subtree: true });
@@ -38,7 +38,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex items-center">
             <span className="text-2xl font-bold bg-gradient-to-r from-taxmitra-blue to-taxmitra-teal bg-clip-text text-transparent">
-             <Link href={'/'}>TaxMitra</Link> 
+              <Link href={'/'}>TaxMitra</Link>
             </span>
           </div>
 
@@ -73,7 +73,7 @@ export default function Navbar() {
             <div className="flex items-center gap-2 cursor-pointer" onClick={openLangDropdown}>
               <span className="text-xl">🌐</span>
               <div id="google_translate_element" className="hidden md:block" />
-              
+
             </div>
           </div>
 
@@ -115,7 +115,7 @@ export default function Navbar() {
               <div className="flex items-center gap-2 mt-2 cursor-pointer" onClick={openLangDropdown}>
                 <span className="text-xl">🌐</span>
                 <div id="google_translate_element" />
-               
+
               </div>
             </div>
           </div>
