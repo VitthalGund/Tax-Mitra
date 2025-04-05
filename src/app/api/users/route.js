@@ -1,5 +1,5 @@
-import { connectDB } from "@/lib/db";
-import { User } from "@/models/index";
+import { connectDB } from "../../lib/db";
+import { User } from "../../models/index";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -53,7 +53,7 @@ export async function PUT(req) {
 
     if (!email) {
       return NextResponse.json(
-        { error: "Email query param required to update user" },
+        { error: "Email query param required to update user" , res1:body, res: parsed, email:email},
         { status: 400 }
       );
     }

@@ -108,53 +108,30 @@ const OtherIncomeSchema = new Schema({
   tds: { type: Number, default: 0 },
 });
 
-const DeductionSchema = new Schema({
-  section80C: { type: Number, default: 0 },
-  section80CCD: { type: Number, default: 0 },
-  section80D: { type: Number, default: 0 },
-  section80E: { type: Number, default: 0 },
-  section80G: { type: Number, default: 0 },
-  section80TTA: { type: Number, default: 0 },
-  section80TTB: { type: Number, default: 0 },
-  homeLoanInterest: { type: Number, default: 0 },
-  principalRepayment: { type: Number, default: 0 },
-  medicalExpenses: { type: Number, default: 0 },
-  tuitionFees: { type: Number, default: 0 },
-  otherDeductions: { type: Number, default: 0 },
-});
 
-const ExemptionRecommendationSchema = new Schema({
-  hraExemption: { type: Number, default: 0 },
-  standardExemption: { type: Number, default: 0 },
-  otherExemptions: { type: Number, default: 0 },
-});
-
-const DeductionRecommendationSchema = new Schema({
-  section80C: { type: Number, default: 0 },
-  section80CCD: { type: Number, default: 0 },
-  section80D: { type: Number, default: 0 },
-  section80E: { type: Number, default: 0 },
-  section80G: { type: Number, default: 0 },
-  section80TTA: { type: Number, default: 0 },
-  section80TTB: { type: Number, default: 0 },
-  homeLoanInterest: { type: Number, default: 0 },
-  principalRepayment: { type: Number, default: 0 },
-  medicalExpenses: { type: Number, default: 0 },
-  tuitionFees: { type: Number, default: 0 },
-  otherDeductions: { type: Number, default: 0 },
-});
-
-const RebateRecommendationSchema = new Schema({
-  rebateUnderSection87A: { type: Number, default: 0 },
-  otherRebates: { type: Number, default: 0 },
-});
-
-const RecommendationSchema = new Schema({
-  deductions: DeductionRecommendationSchema,
-  exemptions: ExemptionRecommendationSchema,
-  rebates: RebateRecommendationSchema,
-  finalTaxLiability: { type: Number, default: 0 },
-  computedOn: { type: Date, default: Date.now },
+const RecommendationSchema = new mongoose.Schema({
+  taxCalculations: {
+    oldRegime: { taxableIncome: Number, tax: Number },
+    newRegime: { taxableIncome: Number, tax: Number },
+  },
+  recommendations: {
+    deductions: { type: Map, of: Number },
+    exemptions: { type: Map, of: Number },
+    rebates: { type: Map, of: Number },
+    investmentOptions: [
+      {
+        name: String,
+        amount: Number,
+        taxBenefit: Number,
+        section: String
+      }
+    ],
+    recommendedRegime: String,
+    finalTaxLiability: Number,
+    taxSaved: Number,
+    reasoning: String
+  },
+  computedOn: { type: Date, default: Date.now }
 });
 
 const TaxRecordSchema = new Schema({
