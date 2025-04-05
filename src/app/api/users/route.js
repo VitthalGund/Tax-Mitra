@@ -1,5 +1,5 @@
-import { connectDB } from "@/lib/db";
-import { User } from "@/models/index";
+import { connectDB } from "../../lib/db";
+import { User } from "../../models/index";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 
