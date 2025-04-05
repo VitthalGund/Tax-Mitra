@@ -55,18 +55,57 @@ export default function PreviewPage({ params }) {
     }
   }
 
-  const handleContinue = () => {
-    router.push(`/tax-form/${unwrappedParams.id}/recommendations`)
-  }
+  const handleContinue = async () => {
+    try {
+      const response = await fetch("/api/tax-records", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.personalInfo.email,
+          financialYear: "2024-25",
+          salaryIncome: formData.incomeDetails.salary.basicSalary,
+          serviceIncome: formData.incomeDetails.services || {},
+          businessIncome: formData.incomeDetails.business || {},
+          investmentIncome: formData.incomeDetails.investments || {},
+          otherIncome: formData.incomeDetails.other || {},
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || "Something went wrong");
+      }
+
+      console.log("✅ Success:", result);
+      return result;
+    } catch (error) {
+      console.error("❌ Error submitting tax record:", error.message);
+      return { success: false, error: error.message };
+    }
+
+    // router.push(`/tax-form/${unwrappedParams.id}/recommendations`)
+  };
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-[#0f3d4c] mb-2">Preview Your Information</h1>
-      <p className="text-gray-600 mb-8">Review your information before proceeding to tax recommendations</p>
+      <h1 className="text-3xl font-bold text-[#0f3d4c] mb-2">
+        Preview Your Information
+      </h1>
+      <p className="text-gray-600 mb-8">
+        Review your information before proceeding to tax recommendations
+      </p>
 
       <FormSteps
         currentStep={3}
-        steps={["User Type", "Personal Information", "Income Details", "Tax Recommendations"]}
+        steps={[
+          "User Type",
+          "Personal Information",
+          "Income Details",
+          "Tax Recommendations",
+        ]}
       />
 
       <div className="mt-8 space-y-6">
@@ -85,14 +124,18 @@ export default function PreviewPage({ params }) {
             </Button>
           </CardHeader>
           <CardContent>
-            <p className="text-lg font-medium capitalize">{formData.userType}</p>
+            <p className="text-lg font-medium capitalize">
+              {formData.userType}
+            </p>
           </CardContent>
         </Card>
 
         {/* Personal Information */}
         <Card>
           <CardHeader className="flex flex-row items-center justify-between pb-2">
-            <CardTitle className="text-xl text-[#0f3d4c]">Personal Information</CardTitle>
+            <CardTitle className="text-xl text-[#0f3d4c]">
+              Personal Information
+            </CardTitle>
             <Button
               variant="outline"
               size="sm"
@@ -107,27 +150,39 @@ export default function PreviewPage({ params }) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <p className="text-sm text-gray-500">Name</p>
-                <p className="font-medium">{formData.personalInfo.name || "Not provided"}</p>
+                <p className="font-medium">
+                  {formData.personalInfo.name || "Not provided"}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">PAN</p>
-                <p className="font-medium">{formData.personalInfo.pan || "Not provided"}</p>
+                <p className="font-medium">
+                  {formData.personalInfo.pan || "Not provided"}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Aadhaar</p>
-                <p className="font-medium">{formData.personalInfo.aadhaar || "Not provided"}</p>
+                <p className="font-medium">
+                  {formData.personalInfo.aadhaar || "Not provided"}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Date of Birth</p>
-                <p className="font-medium">{formData.personalInfo.dob || "Not provided"}</p>
+                <p className="font-medium">
+                  {formData.personalInfo.dob || "Not provided"}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Email</p>
-                <p className="font-medium">{formData.personalInfo.email || "Not provided"}</p>
+                <p className="font-medium">
+                  {formData.personalInfo.email || "Not provided"}
+                </p>
               </div>
               <div>
                 <p className="text-sm text-gray-500">Mobile</p>
-                <p className="font-medium">{formData.personalInfo.mobile || "Not provided"}</p>
+                <p className="font-medium">
+                  {formData.personalInfo.mobile || "Not provided"}
+                </p>
               </div>
               <div className="md:col-span-2">
                 <p className="text-sm text-gray-500">Address</p>
@@ -152,7 +207,9 @@ export default function PreviewPage({ params }) {
         {/* Income Details */}
         <Card>
           <CardHeader className="pb-2">
-            <CardTitle className="text-xl text-[#0f3d4c]">Income Details</CardTitle>
+            <CardTitle className="text-xl text-[#0f3d4c]">
+              Income Details
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="salary" className="w-full">
@@ -178,11 +235,14 @@ export default function PreviewPage({ params }) {
                   </Button>
                 </div>
 
-                {formData.incomeDetails.salary && Object.keys(formData.incomeDetails.salary).length > 0 ? (
+                {formData.incomeDetails.salary &&
+                Object.keys(formData.incomeDetails.salary).length > 0 ? (
                   <div className="space-y-4">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600">Basic Salary</span>
-                      <span className="font-semibold">₹{formData.incomeDetails.salary.basicSalary || "0"}</span>
+                      <span className="font-semibold">
+                        ₹{formData.incomeDetails.salary.basicSalary || "0"}
+                      </span>
                     </div>
                     <Separator />
 
@@ -190,7 +250,11 @@ export default function PreviewPage({ params }) {
                       <>
                         <div className="flex justify-between items-center">
                           <span className="text-gray-600">HRA</span>
-                          <span className="font-semibold">₹{formData.incomeDetails.salary.allowances.hra || "0"}</span>
+                          <span className="font-semibold">
+                            ₹
+                            {formData.incomeDetails.salary.allowances.hra ||
+                              "0"}
+                          </span>
                         </div>
                         <Separator />
                       </>
@@ -198,17 +262,23 @@ export default function PreviewPage({ params }) {
 
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600">Bonus/Commission</span>
-                      <span className="font-semibold">₹{formData.incomeDetails.salary.bonus || "0"}</span>
+                      <span className="font-semibold">
+                        ₹{formData.incomeDetails.salary.bonus || "0"}
+                      </span>
                     </div>
                     <Separator />
 
                     <div className="flex justify-between items-center">
                       <span className="text-gray-600">TDS</span>
-                      <span className="font-semibold">₹{formData.incomeDetails.salary.tds || "0"}</span>
+                      <span className="font-semibold">
+                        ₹{formData.incomeDetails.salary.tds || "0"}
+                      </span>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-gray-500 italic">No salary income details provided</p>
+                  <p className="text-gray-500 italic">
+                    No salary income details provided
+                  </p>
                 )}
               </TabsContent>
 
@@ -226,10 +296,13 @@ export default function PreviewPage({ params }) {
                   </Button>
                 </div>
 
-                {formData.incomeDetails.services && Object.keys(formData.incomeDetails.services).length > 0 ? (
+                {formData.incomeDetails.services &&
+                Object.keys(formData.incomeDetails.services).length > 0 ? (
                   <p>Service income details available</p>
                 ) : (
-                  <p className="text-gray-500 italic">No service income details provided</p>
+                  <p className="text-gray-500 italic">
+                    No service income details provided
+                  </p>
                 )}
               </TabsContent>
 
@@ -247,10 +320,13 @@ export default function PreviewPage({ params }) {
                   </Button>
                 </div>
 
-                {formData.incomeDetails.business && Object.keys(formData.incomeDetails.business).length > 0 ? (
+                {formData.incomeDetails.business &&
+                Object.keys(formData.incomeDetails.business).length > 0 ? (
                   <p>Business income details available</p>
                 ) : (
-                  <p className="text-gray-500 italic">No business income details provided</p>
+                  <p className="text-gray-500 italic">
+                    No business income details provided
+                  </p>
                 )}
               </TabsContent>
 
@@ -268,10 +344,13 @@ export default function PreviewPage({ params }) {
                   </Button>
                 </div>
 
-                {formData.incomeDetails.investments && Object.keys(formData.incomeDetails.investments).length > 0 ? (
+                {formData.incomeDetails.investments &&
+                Object.keys(formData.incomeDetails.investments).length > 0 ? (
                   <p>Investment income details available</p>
                 ) : (
-                  <p className="text-gray-500 italic">No investment income details provided</p>
+                  <p className="text-gray-500 italic">
+                    No investment income details provided
+                  </p>
                 )}
               </TabsContent>
 
@@ -289,10 +368,13 @@ export default function PreviewPage({ params }) {
                   </Button>
                 </div>
 
-                {formData.incomeDetails.other && Object.keys(formData.incomeDetails.other).length > 0 ? (
+                {formData.incomeDetails.other &&
+                Object.keys(formData.incomeDetails.other).length > 0 ? (
                   <p>Other income details available</p>
                 ) : (
-                  <p className="text-gray-500 italic">No other income details provided</p>
+                  <p className="text-gray-500 italic">
+                    No other income details provided
+                  </p>
                 )}
               </TabsContent>
             </Tabs>
@@ -309,13 +391,18 @@ export default function PreviewPage({ params }) {
             <FileText size={16} />
             Print Preview
           </Button>
-          <Button className="bg-[#0f6e6e] hover:bg-[#0c5c5c] flex items-center gap-2" onClick={handleContinue}>
+          <Button
+            className="bg-[#0f6e6e] hover:bg-[#0c5c5c] flex items-center gap-2"
+            onClick={() => {
+              handleContinue();
+            }}
+          >
             Continue to Tax Recommendations
             <CheckCircle size={16} />
           </Button>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
