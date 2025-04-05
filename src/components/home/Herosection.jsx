@@ -32,7 +32,7 @@ export default function Herosection() {
     );
 
     // Navigate to the user type selection page with the session ID
-    router.push(`/tax-form/${sessionId}/ user-type`);
+    router.push(`/tax-form/${sessionId}/user-type`);
   };
   return (
     <section className="relative overflow-hidden">
@@ -77,9 +77,9 @@ export default function Herosection() {
                 Get Started <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
 
-              <Button size="lg" variant="outline">
+              {/* <Button size="lg" variant="outline">
                 Chat with TaxMitra <MessageSquare className="ml-2 h-4 w-4" />
-              </Button>
+              </Button> */}
             </motion.div>
           </motion.div>
 
