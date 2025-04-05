@@ -1,44 +1,68 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { FormSteps } from "@/components/form-steps"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "../../../../components/ui/button";
+import { Card, CardContent } from "../../../../components/ui/card";
+import { Input } from "../../../../components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../../components/ui/select";
+import { FormSteps } from "../../../../components/tax-form/form-steps";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../../components/ui/form";
 
 // Define validation schema
 const personalInfoSchema = z.object({
-  pan: z.string().regex(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, "Invalid PAN format. Example: ABCDE1234F"),
+  pan: z
+    .string()
+    .regex(
+      /^[A-Z]{5}[0-9]{4}[A-Z]{1}$/,
+      "Invalid PAN format. Example: ABCDE1234F"
+    ),
   aadhaar: z.string().regex(/^\d{12}$/, "Aadhaar must be 12 digits"),
   name: z.string().min(3, "Name must be at least 3 characters"),
   dob: z.string().refine((val) => {
-    const date = new Date(val)
-    const today = new Date()
-    return date < today && date > new Date(today.getFullYear() - 100, today.getMonth(), today.getDate())
+    const date = new Date(val);
+    const today = new Date();
+    return (
+      date < today &&
+      date >
+      new Date(today.getFullYear() - 100, today.getMonth(), today.getDate())
+    );
   }, "Please enter a valid date of birth"),
   email: z.string().email("Invalid email address"),
-  mobile: z.string().regex(/^(\+\d{1,3}[- ]?)?\d{10}$/, "Invalid mobile number"),
+  mobile: z
+    .string()
+    .regex(/^(\+\d{1,3}[- ]?)?\d{10}$/, "Invalid mobile number"),
   address: z.string().min(5, "Address must be at least 5 characters"),
   city: z.string().min(2, "City must be at least 2 characters"),
   state: z.string().min(2, "Please select a state"),
   pincode: z.string().regex(/^\d{6}$/, "PIN code must be 6 digits"),
   residentialStatus: z.string().min(1, "Please select your residential status"),
-})
+});
 
-type PersonalInfoFormValues = z.infer<typeof personalInfoSchema>
 
-export default function PersonalInfoPage({ params }: { params: { id: string } }) {
-  const router = useRouter()
-  const [formData, setFormData] = useState<any>(null)
+export default function PersonalInfoPage({ params }) {
+  const router = useRouter();
+  const [formData, setFormData] = useState(null);
+  const unwrappedParams = React.use(params);
 
   // Initialize form with react-hook-form
-  const form = useForm<PersonalInfoFormValues>({
+  const form = useForm({
     resolver: zodResolver(personalInfoSchema),
     defaultValues: {
       pan: "",
@@ -53,46 +77,65 @@ export default function PersonalInfoPage({ params }: { params: { id: string } })
       pincode: "",
       residentialStatus: "",
     },
-  })
+  });
 
   useEffect(() => {
     // Load data from localStorage
-    const savedData = localStorage.getItem(`taxmitra-${params.id}`)
+    const savedData = localStorage.getItem(`taxmitra-${unwrappedParams.id}`);
     if (savedData) {
-      const parsedData = JSON.parse(savedData)
-      setFormData(parsedData)
+      const parsedData = JSON.parse(savedData);
+      setFormData(parsedData);
 
       // If personal info exists, populate the form
-      if (parsedData.personalInfo && Object.keys(parsedData.personalInfo).length > 0) {
+      if (
+        parsedData.personalInfo &&
+        Object.keys(parsedData.personalInfo).length > 0
+      ) {
         Object.entries(parsedData.personalInfo).forEach(([key, value]) => {
-          form.setValue(key as any, value as string)
-        })
+          form.setValue(key, value);
+        });
       }
     } else {
-      router.push(`/tax-form/${params.id}/user-type`)
+      router.push(`/tax-form/${unwrappedParams.id}/user-type`);
     }
-  }, [params.id, router, form])
+  }, [unwrappedParams.id, router, form]);
 
-  const onSubmit = (data: PersonalInfoFormValues) => {
+  const onSubmit = (data) => {
     if (formData) {
-      const updatedData = { ...formData, personalInfo: data }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
-      router.push(`/tax-form/${params.id}/income/salary`)
+      const updatedData = { ...formData, personalInfo: data };
+      localStorage.setItem(
+        `taxmitra-${unwrappedParams.id}`,
+        JSON.stringify(updatedData)
+      );
+      router.push(`/tax-form/${unwrappedParams.id}/income/salary`);
     }
-  }
+  };
 
   if (!formData) {
-    return <div className="flex justify-center items-center min-h-[60vh]">Loading...</div>
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        Loading...
+      </div>
+    );
   }
 
   return (
     <div className="max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold text-[#0f3d4c] mb-2">Personal Information</h1>
-      <p className="text-gray-600 mb-8">Please provide your personal information to continue</p>
+      <h1 className="text-3xl font-bold text-[#0f3d4c] mb-2">
+        Personal Information
+      </h1>
+      <p className="text-gray-600 mb-8">
+        Please provide your personal information to continue
+      </p>
 
       <FormSteps
         currentStep={1}
-        steps={["User Type", "Personal Information", "Income Details", "Tax Recommendations"]}
+        steps={[
+          "User Type",
+          "Personal Information",
+          "Income Details",
+          "Tax Recommendations",
+        ]}
       />
 
       <Card className="mt-8">
@@ -163,7 +206,11 @@ export default function PersonalInfoPage({ params }: { params: { id: string } })
                     <FormItem>
                       <FormLabel>Email Address*</FormLabel>
                       <FormControl>
-                        <Input type="email" placeholder="you@example.com" {...field} />
+                        <Input
+                          type="email"
+                          placeholder="you@example.com"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -218,21 +265,32 @@ export default function PersonalInfoPage({ params }: { params: { id: string } })
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>State*</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select your state" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                          <SelectItem value="andhra-pradesh">
+                            Andhra Pradesh
+                          </SelectItem>
                           <SelectItem value="delhi">Delhi</SelectItem>
                           <SelectItem value="karnataka">Karnataka</SelectItem>
-                          <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                          <SelectItem value="maharashtra">
+                            Maharashtra
+                          </SelectItem>
                           <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
                           <SelectItem value="telangana">Telangana</SelectItem>
-                          <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                          <SelectItem value="west-bengal">West Bengal</SelectItem>
+                          <SelectItem value="uttar-pradesh">
+                            Uttar Pradesh
+                          </SelectItem>
+                          <SelectItem value="west-bengal">
+                            West Bengal
+                          </SelectItem>
                         </SelectContent>
                       </Select>
                       <FormMessage />
@@ -260,7 +318,10 @@ export default function PersonalInfoPage({ params }: { params: { id: string } })
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Residential Status*</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select status" />
@@ -268,7 +329,9 @@ export default function PersonalInfoPage({ params }: { params: { id: string } })
                         </FormControl>
                         <SelectContent>
                           <SelectItem value="resident">Resident</SelectItem>
-                          <SelectItem value="non-resident">Non-Resident</SelectItem>
+                          <SelectItem value="non-resident">
+                            Non-Resident
+                          </SelectItem>
                           <SelectItem value="resident-not-ordinarily-resident">
                             Resident but Not Ordinarily Resident
                           </SelectItem>
@@ -285,11 +348,16 @@ export default function PersonalInfoPage({ params }: { params: { id: string } })
                   type="button"
                   variant="outline"
                   className="border-[#0f6e6e] text-[#0f6e6e]"
-                  onClick={() => router.push(`/tax-form/${params.id}/user-type`)}
+                  onClick={() =>
+                    router.push(`/tax-form/${unwrappedParams.id}/user-type`)
+                  }
                 >
                   Back
                 </Button>
-                <Button type="submit" className="bg-[#0f6e6e] hover:bg-[#0c5c5c]">
+                <Button
+                  type="submit"
+                  className="bg-[#0f6e6e] hover:bg-[#0c5c5c]"
+                >
                   Continue to Income Details
                 </Button>
               </div>
@@ -298,6 +366,5 @@ export default function PersonalInfoPage({ params }: { params: { id: string } })
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-

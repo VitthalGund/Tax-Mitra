@@ -1,27 +1,28 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import React from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
+import { Button } from "../../../../components/ui/button"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../../../components/ui/card"
+import { Badge } from "../../../../components/ui/badge"
+import { Separator } from "../../../../components/ui/separator"
 import { AlertCircle, CheckCircle2, Download, FileText, TrendingUp, Home } from "lucide-react"
-import { FormSteps } from "@/components/form-steps"
+import { FormSteps } from "../../../../components/tax-form/form-steps"
 
-export default function RecommendationsPage({ params }: { params: { id: string } }) {
+export default function RecommendationsPage({ params }) {
   const router = useRouter()
-  const [formData, setFormData] = useState<any>(null)
-
+  const [formData, setFormData] = useState(null)
+  const unwrappedParams = React.use(params)
   useEffect(() => {
     // Load data from localStorage
-    const savedData = localStorage.getItem(`taxmitra-${params.id}`)
+    const savedData = localStorage.getItem(`taxmitra-${unwrappedParams.id}`)
     if (savedData) {
       setFormData(JSON.parse(savedData))
     } else {
-      router.push(`/tax-form/${params.id}/user-type`)
+      router.push(`/tax-form/${unwrappedParams.id}/user-type`)
     }
-  }, [params.id, router])
+  }, [unwrappedParams.id, router])
 
   // Calculate some example recommendations based on the form data
   const calculateRecommendations = () => {
@@ -150,13 +151,12 @@ export default function RecommendationsPage({ params }: { params: { id: string }
                     </div>
                     <Badge
                       className={`
-                      ${
-                        rec.priority === "high"
+                      ${rec.priority === "high"
                           ? "bg-green-100 text-green-800 hover:bg-green-100"
                           : rec.priority === "medium"
                             ? "bg-blue-100 text-blue-800 hover:bg-blue-100"
                             : "bg-gray-100 text-gray-800 hover:bg-gray-100"
-                      }
+                        }
                     `}
                     >
                       {rec.priority === "high"
@@ -239,7 +239,7 @@ export default function RecommendationsPage({ params }: { params: { id: string }
             <Button
               variant="outline"
               className="border-[#0f6e6e] text-[#0f6e6e] flex items-center gap-2"
-              onClick={() => router.push(`/tax-form/${params.id}/preview`)}
+              onClick={() => router.push(`/tax-form/${unwrappedParams.id}/preview`)}
             >
               Back to Preview
             </Button>

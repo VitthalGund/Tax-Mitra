@@ -1,16 +1,34 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "../../../../../components/ui/button";
+import { Card, CardContent } from "../../../../../components/ui/card";
+import { Input } from "../../../../../components/ui/input";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../../../../../components/ui/accordion";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../../../components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../../../../../components/ui/select";
 
 // Define validation schema
 const investmentSchema = z.object({
@@ -32,16 +50,18 @@ const investmentSchema = z.object({
     tdsInterest: z.string().optional(),
   }),
   dividendIncome: z.string().optional(),
-})
+});
 
-type InvestmentFormValues = z.infer<typeof investmentSchema>
 
-export default function InvestmentIncomePage({ params }: { params: { id: string } }) {
-  const router = useRouter()
-  const [formData, setFormData] = useState<any>(null)
+export default function InvestmentIncomePage({
+  params,
+}) {
+  const router = useRouter();
+  const [formData, setFormData] = useState(null);
+  const unwrappedParams = React.use(params)
 
   // Initialize form with react-hook-form
-  const form = useForm<InvestmentFormValues>({
+  const form = useForm({
     resolver: zodResolver(investmentSchema),
     defaultValues: {
       rentalIncome: {
@@ -64,47 +84,57 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
       dividendIncome: "",
     },
     mode: "onChange",
-  })
+  });
 
   useEffect(() => {
     // Load data from localStorage
-    const savedData = localStorage.getItem(`taxmitra-${params.id}`)
+    const savedData = localStorage.getItem(`taxmitra-${unwrappedParams.id}`);
     if (savedData) {
-      const parsedData = JSON.parse(savedData)
-      setFormData(parsedData)
+      const parsedData = JSON.parse(savedData);
+      setFormData(parsedData);
 
       // If investment data exists, populate the form
-      if (parsedData.incomeDetails?.investments && Object.keys(parsedData.incomeDetails.investments).length > 0) {
-        const investmentData = parsedData.incomeDetails.investments
+      if (
+        parsedData.incomeDetails?.investments &&
+        Object.keys(parsedData.incomeDetails.investments).length > 0
+      ) {
+        const investmentData = parsedData.incomeDetails.investments;
 
         // Set basic values
-        if (investmentData.dividendIncome) form.setValue("dividendIncome", investmentData.dividendIncome)
+        if (investmentData.dividendIncome)
+          form.setValue("dividendIncome", investmentData.dividendIncome);
 
         // Set nested values
         if (investmentData.rentalIncome) {
-          Object.entries(investmentData.rentalIncome).forEach(([key, value]) => {
-            form.setValue(`rentalIncome.${key}` as any, value as string)
-          })
+          Object.entries(investmentData.rentalIncome).forEach(
+            ([key, value]) => {
+              form.setValue(`rentalIncome.${key}`, value);
+            }
+          );
         }
 
         if (investmentData.capitalGains) {
-          Object.entries(investmentData.capitalGains).forEach(([key, value]) => {
-            form.setValue(`capitalGains.${key}` as any, value as string)
-          })
+          Object.entries(investmentData.capitalGains).forEach(
+            ([key, value]) => {
+              form.setValue(`capitalGains.${key}`, value);
+            }
+          );
         }
 
         if (investmentData.interestIncome) {
-          Object.entries(investmentData.interestIncome).forEach(([key, value]) => {
-            form.setValue(`interestIncome.${key}` as any, value as string)
-          })
+          Object.entries(investmentData.interestIncome).forEach(
+            ([key, value]) => {
+              form.setValue(`interestIncome.${key}`, value);
+            }
+          );
         }
       }
     } else {
-      router.push(`/tax-form/${params.id}/user-type`)
+      router.push(`/tax-form/${unwrappedParams.id}/user-type`);
     }
-  }, [params.id, router, form])
+  }, [unwrappedParams.id, router, form]);
 
-  const onSubmit = (data: InvestmentFormValues) => {
+  const onSubmit = (data) => {
     if (formData) {
       const updatedData = {
         ...formData,
@@ -112,14 +142,17 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
           ...formData.incomeDetails,
           investments: data,
         },
-      }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
-      router.push(`/tax-form/${params.id}/income/other`)
+      };
+      localStorage.setItem(
+        `taxmitra-${unwrappedParams.id}`,
+        JSON.stringify(updatedData)
+      );
+      router.push(`/tax-form/${unwrappedParams.id}/income/other`);
     }
-  }
+  };
 
   const handleCompleteAll = () => {
-    const data = form.getValues()
+    const data = form.getValues();
     if (formData) {
       const updatedData = {
         ...formData,
@@ -127,14 +160,21 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
           ...formData.incomeDetails,
           investments: data,
         },
-      }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
-      router.push(`/tax-form/${params.id}/preview`)
+      };
+      localStorage.setItem(
+        `taxmitra-${unwrappedParams.id}`,
+        JSON.stringify(updatedData)
+      );
+      router.push(`/tax-form/${unwrappedParams.id}/preview`);
     }
-  }
+  };
 
   if (!formData) {
-    return <div className="flex justify-center items-center min-h-[60vh]">Loading...</div>
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -145,7 +185,9 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
             <div className="space-y-6">
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="rental-income">
-                  <AccordionTrigger className="text-lg font-medium">Rental Income Details</AccordionTrigger>
+                  <AccordionTrigger className="text-lg font-medium">
+                    Rental Income Details
+                  </AccordionTrigger>
                   <AccordionContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                       <FormField
@@ -155,7 +197,11 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
                           <FormItem>
                             <FormLabel>Gross Rental Income</FormLabel>
                             <FormControl>
-                              <Input type="text" placeholder="Enter amount" {...field} />
+                              <Input
+                                type="text"
+                                placeholder="Enter amount"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -169,7 +215,11 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
                           <FormItem>
                             <FormLabel>Municipal Taxes Paid</FormLabel>
                             <FormControl>
-                              <Input type="text" placeholder="Enter amount" {...field} />
+                              <Input
+                                type="text"
+                                placeholder="Enter amount"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -181,9 +231,15 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
                         name="rentalIncome.standardDeductionRent"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Computed Standard Deduction (30% on net rent)</FormLabel>
+                            <FormLabel>
+                              Computed Standard Deduction (30% on net rent)
+                            </FormLabel>
                             <FormControl>
-                              <Input type="text" placeholder="Enter amount" {...field} />
+                              <Input
+                                type="text"
+                                placeholder="Enter amount"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -206,7 +262,11 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
                           <FormItem>
                             <FormLabel>Sale Price</FormLabel>
                             <FormControl>
-                              <Input type="text" placeholder="Enter amount" {...field} />
+                              <Input
+                                type="text"
+                                placeholder="Enter amount"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -220,7 +280,11 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
                           <FormItem>
                             <FormLabel>Cost of Acquisition</FormLabel>
                             <FormControl>
-                              <Input type="text" placeholder="Enter amount" {...field} />
+                              <Input
+                                type="text"
+                                placeholder="Enter amount"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -260,9 +324,15 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
                         name="capitalGains.indexationFactor"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Indexation Factor (if applicable)</FormLabel>
+                            <FormLabel>
+                              Indexation Factor (if applicable)
+                            </FormLabel>
                             <FormControl>
-                              <Input type="text" placeholder="Enter factor" {...field} />
+                              <Input
+                                type="text"
+                                placeholder="Enter factor"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -275,15 +345,22 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
                         render={({ field }) => (
                           <FormItem>
                             <FormLabel>Holding Period</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <Select
+                              onValueChange={field.onChange}
+                              defaultValue={field.value}
+                            >
                               <FormControl>
                                 <SelectTrigger>
                                   <SelectValue placeholder="Select period" />
                                 </SelectTrigger>
                               </FormControl>
                               <SelectContent>
-                                <SelectItem value="short-term">Short-term</SelectItem>
-                                <SelectItem value="long-term">Long-term</SelectItem>
+                                <SelectItem value="short-term">
+                                  Short-term
+                                </SelectItem>
+                                <SelectItem value="long-term">
+                                  Long-term
+                                </SelectItem>
                               </SelectContent>
                             </Select>
                             <FormMessage />
@@ -295,7 +372,9 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
                 </AccordionItem>
 
                 <AccordionItem value="interest-income">
-                  <AccordionTrigger className="text-lg font-medium">Interest Income from Investments</AccordionTrigger>
+                  <AccordionTrigger className="text-lg font-medium">
+                    Interest Income from Investments
+                  </AccordionTrigger>
                   <AccordionContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                       <FormField
@@ -303,9 +382,15 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
                         name="interestIncome.interestEarned"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Interest Earned (from FDs, bonds, etc.)</FormLabel>
+                            <FormLabel>
+                              Interest Earned (from FDs, bonds, etc.)
+                            </FormLabel>
                             <FormControl>
-                              <Input type="text" placeholder="Enter amount" {...field} />
+                              <Input
+                                type="text"
+                                placeholder="Enter amount"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -319,7 +404,11 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
                           <FormItem>
                             <FormLabel>TDS on Interest Income</FormLabel>
                             <FormControl>
-                              <Input type="text" placeholder="Enter amount" {...field} />
+                              <Input
+                                type="text"
+                                placeholder="Enter amount"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -354,15 +443,25 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
                 type="button"
                 variant="outline"
                 className="border-[#0f6e6e] text-[#0f6e6e]"
-                onClick={() => router.push(`/tax-form/${params.id}/income/business`)}
+                onClick={() =>
+                  router.push(`/tax-form/${unwrappedParams.id}/income/business`)
+                }
               >
                 Back
               </Button>
               <div className="space-x-4">
-                <Button type="submit" variant="outline" className="border-[#0f6e6e] text-[#0f6e6e]">
+                <Button
+                  type="submit"
+                  variant="outline"
+                  className="border-[#0f6e6e] text-[#0f6e6e]"
+                >
                   Save and Continue to Next Section
                 </Button>
-                <Button type="button" className="bg-[#0f6e6e] hover:bg-[#0c5c5c]" onClick={handleCompleteAll}>
+                <Button
+                  type="button"
+                  className="bg-[#0f6e6e] hover:bg-[#0c5c5c]"
+                  onClick={handleCompleteAll}
+                >
                   Submit All Income Details
                 </Button>
               </div>
@@ -371,6 +470,5 @@ export default function InvestmentIncomePage({ params }: { params: { id: string 
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }
-

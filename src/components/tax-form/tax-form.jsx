@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Button } from "../ui/button"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import UserTypeSelection from "./user-type-selection"
@@ -15,7 +15,7 @@ import TaxRecommendations from "./tax-recommendations"
 
 export default function TaxForm() {
   const [open, setOpen] = useState(false)
-  const [userType, setUserType] = useState<"individual" | "corporate" | null>(null)
+  const [userType, setUserType] = useState < "individual" | "corporate" | null > (null)
   const [currentStep, setCurrentStep] = useState(0)
   const [activeIncomeTab, setActiveIncomeTab] = useState("salary")
   const [formData, setFormData] = useState({
@@ -206,13 +206,12 @@ export default function TaxForm() {
               {steps.slice(1).map((step, index) => (
                 <div key={step.id} className="flex items-center">
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      currentStep > index + 1
+                    className={`w-8 h-8 rounded-full flex items-center justify-center ${currentStep > index + 1
+                      ? "bg-[#0f6e6e] text-white"
+                      : currentStep === index + 1
                         ? "bg-[#0f6e6e] text-white"
-                        : currentStep === index + 1
-                          ? "bg-[#0f6e6e] text-white"
-                          : "bg-gray-200 text-gray-600"
-                    }`}
+                        : "bg-gray-200 text-gray-600"
+                      }`}
                   >
                     {index + 1}
                   </div>

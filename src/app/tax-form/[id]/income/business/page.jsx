@@ -1,15 +1,15 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Button } from "../../../../../components/ui/button"
+import { Card, CardContent } from "../../../../../components/ui/card"
+import { Input } from "../../../../../components/ui/input"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../../../../components/ui/accordion"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../../../../components/ui/form"
 
 // Define validation schema
 const businessSchema = z.object({
@@ -25,14 +25,14 @@ const businessSchema = z.object({
   otherAdjustments: z.string().optional(),
 })
 
-type BusinessFormValues = z.infer<typeof businessSchema>
 
-export default function BusinessIncomePage({ params }: { params: { id: string } }) {
+export default function BusinessIncomePage({ params }) {
   const router = useRouter()
-  const [formData, setFormData] = useState<any>(null)
+  const [formData, setFormData] = useState(null)
+  const unwrappedParams = React.use(params)
 
   // Initialize form with react-hook-form
-  const form = useForm<BusinessFormValues>({
+  const form = useForm({
     resolver: zodResolver(businessSchema),
     defaultValues: {
       grossTurnover: "",
@@ -51,7 +51,7 @@ export default function BusinessIncomePage({ params }: { params: { id: string } 
 
   useEffect(() => {
     // Load data from localStorage
-    const savedData = localStorage.getItem(`taxmitra-${params.id}`)
+    const savedData = localStorage.getItem(`taxmitra-${unwrappedParams.id}`)
     if (savedData) {
       const parsedData = JSON.parse(savedData)
       setFormData(parsedData)
@@ -70,16 +70,16 @@ export default function BusinessIncomePage({ params }: { params: { id: string } 
         // Set nested values
         if (businessData.operatingExpenses) {
           Object.entries(businessData.operatingExpenses).forEach(([key, value]) => {
-            form.setValue(`operatingExpenses.${key}` as any, value as string)
+            form.setValue(`operatingExpenses.${key}`, value)
           })
         }
       }
     } else {
-      router.push(`/tax-form/${params.id}/user-type`)
+      router.push(`/tax-form/${unwrappedParams.id}/user-type`)
     }
-  }, [params.id, router, form])
+  }, [unwrappedParams.id, router, form])
 
-  const onSubmit = (data: BusinessFormValues) => {
+  const onSubmit = (data) => {
     if (formData) {
       const updatedData = {
         ...formData,
@@ -88,8 +88,8 @@ export default function BusinessIncomePage({ params }: { params: { id: string } 
           business: data,
         },
       }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
-      router.push(`/tax-form/${params.id}/income/investments`)
+      localStorage.setItem(`taxmitra-${unwrappedParams.id}`, JSON.stringify(updatedData))
+      router.push(`/tax-form/${unwrappedParams.id}/income/investments`)
     }
   }
 
@@ -103,8 +103,8 @@ export default function BusinessIncomePage({ params }: { params: { id: string } 
           business: data,
         },
       }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
-      router.push(`/tax-form/${params.id}/preview`)
+      localStorage.setItem(`taxmitra-${unwrappedParams.id}`, JSON.stringify(updatedData))
+      router.push(`/tax-form/${unwrappedParams.id}/preview`)
     }
   }
 
@@ -249,7 +249,7 @@ export default function BusinessIncomePage({ params }: { params: { id: string } 
                 type="button"
                 variant="outline"
                 className="border-[#0f6e6e] text-[#0f6e6e]"
-                onClick={() => router.push(`/tax-form/${params.id}/income/services`)}
+                onClick={() => router.push(`/tax-form/${unwrappedParams.id}/income/services`)}
               >
                 Back
               </Button>

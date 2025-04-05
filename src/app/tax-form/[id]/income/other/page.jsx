@@ -1,15 +1,22 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "../../../../../components/ui/button";
+import { Card, CardContent } from "../../../../../components/ui/card";
+import { Input } from "../../../../../components/ui/input";
+import { Textarea } from "../../../../../components/ui/textarea";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../../../components/ui/form";
 
 // Define validation schema
 const otherIncomeSchema = z.object({
@@ -18,16 +25,17 @@ const otherIncomeSchema = z.object({
   lotteryGambling: z.string().optional(),
   otherIncomeDetails: z.string().optional(),
   tdsOtherSources: z.string().optional(),
-})
+});
 
-type OtherIncomeFormValues = z.infer<typeof otherIncomeSchema>
 
-export default function OtherIncomePage({ params }: { params: { id: string } }) {
-  const router = useRouter()
-  const [formData, setFormData] = useState<any>(null)
-
+export default function OtherIncomePage({
+  params,
+}) {
+  const router = useRouter();
+  const [formData, setFormData] = useState(null);
+  const unwrappedParams = React.use(params)
   // Initialize form with react-hook-form
-  const form = useForm<OtherIncomeFormValues>({
+  const form = useForm({
     resolver: zodResolver(otherIncomeSchema),
     defaultValues: {
       otherInterest: "",
@@ -37,29 +45,32 @@ export default function OtherIncomePage({ params }: { params: { id: string } }) 
       tdsOtherSources: "",
     },
     mode: "onChange",
-  })
+  });
 
   useEffect(() => {
     // Load data from localStorage
-    const savedData = localStorage.getItem(`taxmitra-${params.id}`)
+    const savedData = localStorage.getItem(`taxmitra-${unwrappedParams.id}`);
     if (savedData) {
-      const parsedData = JSON.parse(savedData)
-      setFormData(parsedData)
+      const parsedData = JSON.parse(savedData);
+      setFormData(parsedData);
 
       // If other income data exists, populate the form
-      if (parsedData.incomeDetails?.other && Object.keys(parsedData.incomeDetails.other).length > 0) {
-        const otherData = parsedData.incomeDetails.other
+      if (
+        parsedData.incomeDetails?.other &&
+        Object.keys(parsedData.incomeDetails.other).length > 0
+      ) {
+        const otherData = parsedData.incomeDetails.other;
 
         Object.entries(otherData).forEach(([key, value]) => {
-          form.setValue(key as any, value as string)
-        })
+          form.setValue(key, value);
+        });
       }
     } else {
-      router.push(`/tax-form/${params.id}/user-type`)
+      router.push(`/tax-form/${unwrappedParams.id}/user-type`);
     }
-  }, [params.id, router, form])
+  }, [unwrappedParams.id, router, form]);
 
-  const onSubmit = (data: OtherIncomeFormValues) => {
+  const onSubmit = (data) => {
     if (formData) {
       const updatedData = {
         ...formData,
@@ -67,14 +78,17 @@ export default function OtherIncomePage({ params }: { params: { id: string } }) 
           ...formData.incomeDetails,
           other: data,
         },
-      }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
-      router.push(`/tax-form/${params.id}/preview`)
+      };
+      localStorage.setItem(
+        `taxmitra-${unwrappedParams.id}`,
+        JSON.stringify(updatedData)
+      );
+      router.push(`/tax-form/${unwrappedParams.id}/preview`);
     }
-  }
+  };
 
   const handleCompleteAll = () => {
-    const data = form.getValues()
+    const data = form.getValues();
     if (formData) {
       const updatedData = {
         ...formData,
@@ -82,14 +96,21 @@ export default function OtherIncomePage({ params }: { params: { id: string } }) 
           ...formData.incomeDetails,
           other: data,
         },
-      }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
-      router.push(`/tax-form/${params.id}/preview`)
+      };
+      localStorage.setItem(
+        `taxmitra-${unwrappedParams.id}`,
+        JSON.stringify(updatedData)
+      );
+      router.push(`/tax-form/${unwrappedParams.id}/preview`);
     }
-  }
+  };
 
   if (!formData) {
-    return <div className="flex justify-center items-center min-h-[60vh]">Loading...</div>
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -123,7 +144,11 @@ export default function OtherIncomePage({ params }: { params: { id: string } }) 
                   <FormItem>
                     <FormLabel>Dividend / Distribution Income</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Enter income from companies, mutual funds, etc." {...field} />
+                      <Input
+                        type="text"
+                        placeholder="Enter income from companies, mutual funds, etc."
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -137,7 +162,11 @@ export default function OtherIncomePage({ params }: { params: { id: string } }) 
                   <FormItem>
                     <FormLabel>Lottery/Gambling Winnings</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Enter amount (higher tax rates applicable)" {...field} />
+                      <Input
+                        type="text"
+                        placeholder="Enter amount (higher tax rates applicable)"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -169,7 +198,11 @@ export default function OtherIncomePage({ params }: { params: { id: string } }) 
                   <FormItem>
                     <FormLabel>TDS on Other Sources</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Enter any TDS applicable on these incomes" {...field} />
+                      <Input
+                        type="text"
+                        placeholder="Enter any TDS applicable on these incomes"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -182,15 +215,25 @@ export default function OtherIncomePage({ params }: { params: { id: string } }) 
                 type="button"
                 variant="outline"
                 className="border-[#0f6e6e] text-[#0f6e6e]"
-                onClick={() => router.push(`/tax-form/${params.id}/income/investments`)}
+                onClick={() =>
+                  router.push(`/tax-form/${unwrappedParams.id}/income/investments`)
+                }
               >
                 Back
               </Button>
               <div className="space-x-4">
-                <Button type="submit" variant="outline" className="border-[#0f6e6e] text-[#0f6e6e]">
+                <Button
+                  type="submit"
+                  variant="outline"
+                  className="border-[#0f6e6e] text-[#0f6e6e]"
+                >
                   Save and Continue
                 </Button>
-                <Button type="button" className="bg-[#0f6e6e] hover:bg-[#0c5c5c]" onClick={handleCompleteAll}>
+                <Button
+                  type="button"
+                  className="bg-[#0f6e6e] hover:bg-[#0c5c5c]"
+                  onClick={handleCompleteAll}
+                >
                   Submit All Income Details
                 </Button>
               </div>
@@ -199,6 +242,5 @@ export default function OtherIncomePage({ params }: { params: { id: string } }) 
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }
-

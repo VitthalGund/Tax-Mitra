@@ -1,6 +1,5 @@
 import { cn } from "../../lib/utils"
 
-import PropTypes from "prop-types";
 
 export function FormSteps({ currentStep, steps }) {
   return (

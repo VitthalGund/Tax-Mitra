@@ -1,35 +1,32 @@
 "use client"
 
-import type React from "react"
+import React from "react"
 
 import { useEffect, useState } from "react"
 import { useRouter, usePathname } from "next/navigation"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { FormSteps } from "@/components/form-steps"
+import { Tabs, TabsList, TabsTrigger } from "../../../../components/ui/tabs"
+import { FormSteps } from "../../../../components/tax-form/form-steps"
 
 export default function IncomeLayout({
   children,
   params,
-}: {
-  children: React.ReactNode
-  params: { id: string }
 }) {
   const router = useRouter()
   const pathname = usePathname()
-  const [formData, setFormData] = useState<any>(null)
-
+  const [formData, setFormData] = useState(null)
+  const unwrappedParams = React.use(params)
   useEffect(() => {
     // Load data from localStorage
-    const savedData = localStorage.getItem(`taxmitra-${params.id}`)
+    const savedData = localStorage.getItem(`taxmitra-${unwrappedParams.id}`)
     if (savedData) {
       setFormData(JSON.parse(savedData))
     } else {
-      router.push(`/tax-form/${params.id}/user-type`)
+      router.push(`/tax-form/${unwrappedParams.id}/user-type`)
     }
-  }, [params.id, router])
+  }, [unwrappedParams.id, router])
 
-  const handleTabChange = (value: string) => {
-    router.push(`/tax-form/${params.id}/income/${value}`)
+  const handleTabChange = (value) => {
+    router.push(`/tax-form/${unwrappedParams.id}/income/${value}`)
   }
 
   if (!formData) {

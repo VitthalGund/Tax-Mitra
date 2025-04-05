@@ -1,54 +1,54 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { FormSteps } from "@/components/form-steps"
-import { Separator } from "@/components/ui/separator"
+import { Button } from "../../../../components/ui/button"
+import { Card, CardContent, CardHeader, CardTitle } from "../../../../components/ui/card"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "../../../../components/ui/tabs"
+import { FormSteps } from "../../../../components/tax-form/form-steps"
+import { Separator } from "../../../../components/ui/separator"
 import { Edit, FileText, CheckCircle } from "lucide-react"
 
-export default function PreviewPage({ params }: { params: { id: string } }) {
+export default function PreviewPage({ params }) {
   const router = useRouter()
-  const [formData, setFormData] = useState<any>(null)
-
+  const [formData, setFormData] = useState(null)
+  const unwrappedParams = React.use(params)
   useEffect(() => {
     // Load data from localStorage
-    const savedData = localStorage.getItem(`taxmitra-${params.id}`)
+    const savedData = localStorage.getItem(`taxmitra-${unwrappedParams.id}`)
     if (savedData) {
       setFormData(JSON.parse(savedData))
     } else {
-      router.push(`/tax-form/${params.id}/user-type`)
+      router.push(`/tax-form/${unwrappedParams.id}/user-type`)
     }
-  }, [params.id, router])
+  }, [unwrappedParams.id, router])
 
   if (!formData) {
     return <div className="flex justify-center items-center min-h-[60vh]">Loading...</div>
   }
 
-  const handleEdit = (section: string) => {
+  const handleEdit = (section) => {
     switch (section) {
       case "userType":
-        router.push(`/tax-form/${params.id}/user-type`)
+        router.push(`/tax-form/${unwrappedParams.id}/user-type`)
         break
       case "personalInfo":
-        router.push(`/tax-form/${params.id}/personal-info`)
+        router.push(`/tax-form/${unwrappedParams.id}/personal-info`)
         break
       case "salary":
-        router.push(`/tax-form/${params.id}/income/salary`)
+        router.push(`/tax-form/${unwrappedParams.id}/income/salary`)
         break
       case "services":
-        router.push(`/tax-form/${params.id}/income/services`)
+        router.push(`/tax-form/${unwrappedParams.id}/income/services`)
         break
       case "business":
-        router.push(`/tax-form/${params.id}/income/business`)
+        router.push(`/tax-form/${unwrappedParams.id}/income/business`)
         break
       case "investments":
-        router.push(`/tax-form/${params.id}/income/investments`)
+        router.push(`/tax-form/${unwrappedParams.id}/income/investments`)
         break
       case "other":
-        router.push(`/tax-form/${params.id}/income/other`)
+        router.push(`/tax-form/${unwrappedParams.id}/income/other`)
         break
       default:
         break
@@ -56,7 +56,7 @@ export default function PreviewPage({ params }: { params: { id: string } }) {
   }
 
   const handleContinue = () => {
-    router.push(`/tax-form/${params.id}/recommendations`)
+    router.push(`/tax-form/${unwrappedParams.id}/recommendations`)
   }
 
   return (

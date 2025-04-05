@@ -1,18 +1,20 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import React from "react"
 import { useRouter } from "next/navigation"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "../../../../components/ui/card"
+import { Button } from "../../../../components/ui/button"
 import { FormSteps } from "../../../../components/tax-form/form-steps"
 
 export default function UserTypePage({ params }) {
   const router = useRouter()
-  const [formData, setFormData] = useState<any>(null)
+  const [formData, setFormData] = useState(null)
+  const unwrappedParams = React.use(params)
 
   useEffect(() => {
     // Load data from localStorage
-    const savedData = localStorage.getItem(`taxmitra-${params.id}`)
+    const savedData = localStorage.getItem(`taxmitra-${unwrappedParams.id}`)
     if (savedData) {
       setFormData(JSON.parse(savedData))
     } else {
@@ -28,16 +30,16 @@ export default function UserTypePage({ params }) {
           other: {},
         },
       }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(initialData))
+      localStorage.setItem(`taxmitra-${unwrappedParams.id}`, JSON.stringify(initialData))
       setFormData(initialData)
     }
-  }, [params.id])
+  }, [unwrappedParams.id])
 
   const handleSelect = () => {
     if (formData) {
-      const updatedData = { ...formData, userType: type }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
-      router.push(`/tax-form/${params.id}/personal-info`)
+      const updatedData = { ...formData, userType: formData.userType }
+      localStorage.setItem(`taxmitra-${unwrappedParams.id}`, JSON.stringify(updatedData))
+      router.push(`/tax-form/${unwrappedParams.id}/personal-info`)
     }
   }
 

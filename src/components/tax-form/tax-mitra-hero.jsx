@@ -7,9 +7,9 @@ import { v4 as uuidv4 } from "uuid"
 export function TaxMitraHero() {
   const router = useRouter()
 
-  const handleGetStarted = () => {
+  const handleGetStarted = async () => {
     // Generate a unique ID for this tax filing session
-    const sessionId = uuidv4()
+    const sessionId = v4()
 
     // Initialize empty form data in localStorage
     localStorage.setItem(

@@ -1,15 +1,15 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Button } from "../../../../../components/ui/button"
+import { Card, CardContent } from "../../../../../components/ui/card"
+import { Input } from "../../../../../components/ui/input"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "../../../../../components/ui/accordion"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../../../../../components/ui/form"
 
 // Define validation schema
 const salarySchema = z.object({
@@ -29,14 +29,15 @@ const salarySchema = z.object({
   tds: z.string().optional(),
 })
 
-type SalaryFormValues = z.infer<typeof salarySchema>
 
-export default function SalaryIncomePage({ params }: { params: { id: string } }) {
+export default function SalaryIncomePage({ params }) {
   const router = useRouter()
-  const [formData, setFormData] = useState<any>(null)
+  const [formData, setFormData] = useState(null)
+  const unwrappedParams = React.use(params)
+
 
   // Initialize form with react-hook-form
-  const form = useForm<SalaryFormValues>({
+  const form = useForm({
     resolver: zodResolver(salarySchema),
     defaultValues: {
       basicSalary: "",
@@ -58,7 +59,7 @@ export default function SalaryIncomePage({ params }: { params: { id: string } })
 
   useEffect(() => {
     // Load data from localStorage
-    const savedData = localStorage.getItem(`taxmitra-${params.id}`)
+    const savedData = localStorage.getItem(`taxmitra-${unwrappedParams.id}`)
     if (savedData) {
       const parsedData = JSON.parse(savedData)
       setFormData(parsedData)
@@ -75,22 +76,22 @@ export default function SalaryIncomePage({ params }: { params: { id: string } })
         // Set nested values
         if (salaryData.allowances) {
           Object.entries(salaryData.allowances).forEach(([key, value]) => {
-            form.setValue(`allowances.${key}` as any, value as string)
+            form.setValue(`allowances.${key}`, value)
           })
         }
 
         if (salaryData.deductions) {
           Object.entries(salaryData.deductions).forEach(([key, value]) => {
-            form.setValue(`deductions.${key}` as any, value as string)
+            form.setValue(`deductions.${key}`, value)
           })
         }
       }
     } else {
-      router.push(`/tax-form/${params.id}/user-type`)
+      router.push(`/tax-form/${unwrappedParams.id}/user-type`)
     }
-  }, [params.id, router, form])
+  }, [unwrappedParams.id, router, form])
 
-  const onSubmit = (data: SalaryFormValues) => {
+  const onSubmit = (data) => {
     if (formData) {
       const updatedData = {
         ...formData,
@@ -99,8 +100,8 @@ export default function SalaryIncomePage({ params }: { params: { id: string } })
           salary: data,
         },
       }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
-      router.push(`/tax-form/${params.id}/income/services`)
+      localStorage.setItem(`taxmitra-${unwrappedParams.id}`, JSON.stringify(updatedData))
+      router.push(`/tax-form/${unwrappedParams.id}/income/services`)
     }
   }
 
@@ -114,8 +115,8 @@ export default function SalaryIncomePage({ params }: { params: { id: string } })
           salary: data,
         },
       }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
-      router.push(`/tax-form/${params.id}/preview`)
+      localStorage.setItem(`taxmitra-${unwrappedParams.id}`, JSON.stringify(updatedData))
+      router.push(`/tax-form/${unwrappedParams.id}/preview`)
     }
   }
 
@@ -293,7 +294,7 @@ export default function SalaryIncomePage({ params }: { params: { id: string } })
                 type="button"
                 variant="outline"
                 className="border-[#0f6e6e] text-[#0f6e6e]"
-                onClick={() => router.push(`/tax-form/${params.id}/personal-info`)}
+                onClick={() => router.push(`/tax-form/${unwrappedParams.id}/personal-info`)}
               >
                 Back
               </Button>

@@ -1,12 +1,39 @@
 "use client";
 
 import { Sparkles, ArrowRight, MessageSquare } from "lucide-react";
-import Link from "next/link";
+
 import React from "react";
 import { Button } from "../ui/button";
 import { motion } from "framer-motion";
+import { useRouter } from "next/navigation";
+import { v4 as uuidv4 } from "uuid"
 
 export default function Herosection() {
+  const router = useRouter();
+
+  const handleGetStarted = () => {
+    // Generate a unique ID for this tax filing session
+    const sessionId = uuidv4();
+
+    // Initialize empty form data in localStorage
+    localStorage.setItem(
+      `taxmitra-${sessionId}`,
+      JSON.stringify({
+        userType: null,
+        personalInfo: {},
+        incomeDetails: {
+          salary: {},
+          services: {},
+          business: {},
+          investments: {},
+          other: {},
+        },
+      })
+    );
+
+    // Navigate to the user type selection page with the session ID
+    router.push(`/tax-form/${sessionId}/ user-type`);
+  };
   return (
     <section className="relative overflow-hidden">
       <div className="container relative z-10">
@@ -42,14 +69,14 @@ export default function Herosection() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
-              <Link href="/onboard">
-                <Button
-                  size="lg"
-                  className="bg-gradient-to-r from-taxmitra-blue to-taxmitra-teal hover:from-taxmitra-teal hover:to-taxmitra-blue transition-all ease-in-out duration-700"
-                >
-                  Get Started <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
-              </Link>
+              <Button
+                onClick={handleGetStarted}
+                size="lg"
+                className="bg-gradient-to-r from-taxmitra-blue to-taxmitra-teal hover:from-taxmitra-teal hover:to-taxmitra-blue transition-all ease-in-out duration-700"
+              >
+                Get Started <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+
               <Button size="lg" variant="outline">
                 Chat with TaxMitra <MessageSquare className="ml-2 h-4 w-4" />
               </Button>
@@ -71,7 +98,7 @@ export default function Herosection() {
                 className="relative bg-white rounded-xl cursor-pointer shadow-lg p-6 border hover:scale-110 border-gray-100"
                 initial={{ y: 50, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
-                              transition={{ delay: 1 }}
+                transition={{ delay: 1 }}
                 whileHover={{ scale: 1.05 }}
               >
                 {/* Header */}

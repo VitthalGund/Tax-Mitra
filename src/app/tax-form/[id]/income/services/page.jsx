@@ -1,15 +1,27 @@
-"use client"
+"use client";
 
-import { useEffect, useState } from "react"
-import { useRouter } from "next/navigation"
-import { z } from "zod"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useForm } from "react-hook-form"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Button } from "../../../../../components/ui/button";
+import { Card, CardContent } from "../../../../../components/ui/card";
+import { Input } from "../../../../../components/ui/input";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "../../../../../components/ui/accordion";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "../../../../../components/ui/form";
 
 // Define validation schema
 const serviceSchema = z.object({
@@ -22,16 +34,17 @@ const serviceSchema = z.object({
   }),
   depreciation: z.string().optional(),
   tdsAdvanceTax: z.string().optional(),
-})
+});
 
-type ServiceFormValues = z.infer<typeof serviceSchema>
-
-export default function ServiceIncomePage({ params }: { params: { id: string } }) {
-  const router = useRouter()
-  const [formData, setFormData] = useState<any>(null)
+export default function ServiceIncomePage({
+  params,
+}) {
+  const router = useRouter();
+  const [formData, setFormData] = useState(null);
+  const unwrappedParams = React.use(params)
 
   // Initialize form with react-hook-form
-  const form = useForm<ServiceFormValues>({
+  const form = useForm({
     resolver: zodResolver(serviceSchema),
     defaultValues: {
       grossServiceIncome: "",
@@ -45,37 +58,45 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
       tdsAdvanceTax: "",
     },
     mode: "onChange",
-  })
+  });
 
   useEffect(() => {
     // Load data from localStorage
-    const savedData = localStorage.getItem(`taxmitra-${params.id}`)
+    const savedData = localStorage.getItem(`taxmitra-${unwrappedParams.id}`);
     if (savedData) {
-      const parsedData = JSON.parse(savedData)
-      setFormData(parsedData)
+      const parsedData = JSON.parse(savedData);
+      setFormData(parsedData);
 
       // If service data exists, populate the form
-      if (parsedData.incomeDetails?.services && Object.keys(parsedData.incomeDetails.services).length > 0) {
-        const serviceData = parsedData.incomeDetails.services
+      if (
+        parsedData.incomeDetails?.services &&
+        Object.keys(parsedData.incomeDetails.services).length > 0
+      ) {
+        const serviceData = parsedData.incomeDetails.services;
 
         // Set basic values
-        if (serviceData.grossServiceIncome) form.setValue("grossServiceIncome", serviceData.grossServiceIncome)
-        if (serviceData.depreciation) form.setValue("depreciation", serviceData.depreciation)
-        if (serviceData.tdsAdvanceTax) form.setValue("tdsAdvanceTax", serviceData.tdsAdvanceTax)
+        if (serviceData.grossServiceIncome)
+          form.setValue("grossServiceIncome", serviceData.grossServiceIncome);
+        if (serviceData.depreciation)
+          form.setValue("depreciation", serviceData.depreciation);
+        if (serviceData.tdsAdvanceTax)
+          form.setValue("tdsAdvanceTax", serviceData.tdsAdvanceTax);
 
         // Set nested values
         if (serviceData.allowableExpenses) {
-          Object.entries(serviceData.allowableExpenses).forEach(([key, value]) => {
-            form.setValue(`allowableExpenses.${key}` as any, value as string)
-          })
+          Object.entries(serviceData.allowableExpenses).forEach(
+            ([key, value]) => {
+              form.setValue(`allowableExpenses.${key}`, value);
+            }
+          );
         }
       }
     } else {
-      router.push(`/tax-form/${params.id}/user-type`)
+      router.push(`/tax-form/${unwrappedParams.id}/user-type`);
     }
-  }, [params.id, router, form])
+  }, [unwrappedParams.id, router, form]);
 
-  const onSubmit = (data: ServiceFormValues) => {
+  const onSubmit = (data) => {
     if (formData) {
       const updatedData = {
         ...formData,
@@ -83,14 +104,17 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
           ...formData.incomeDetails,
           services: data,
         },
-      }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
-      router.push(`/tax-form/${params.id}/income/business`)
+      };
+      localStorage.setItem(
+        `taxmitra-${unwrappedParams.id}`,
+        JSON.stringify(updatedData)
+      );
+      router.push(`/tax-form/${unwrappedParams.id}/income/business`);
     }
-  }
+  };
 
   const handleCompleteAll = () => {
-    const data = form.getValues()
+    const data = form.getValues();
     if (formData) {
       const updatedData = {
         ...formData,
@@ -98,14 +122,21 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
           ...formData.incomeDetails,
           services: data,
         },
-      }
-      localStorage.setItem(`taxmitra-${params.id}`, JSON.stringify(updatedData))
-      router.push(`/tax-form/${params.id}/preview`)
+      };
+      localStorage.setItem(
+        `taxmitra-${unwrappedParams.id}`,
+        JSON.stringify(updatedData)
+      );
+      router.push(`/tax-form/${unwrappedParams.id}/preview`);
     }
-  }
+  };
 
   if (!formData) {
-    return <div className="flex justify-center items-center min-h-[60vh]">Loading...</div>
+    return (
+      <div className="flex justify-center items-center min-h-[60vh]">
+        Loading...
+      </div>
+    );
   }
 
   return (
@@ -121,7 +152,11 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
                   <FormItem>
                     <FormLabel>Gross Service Income / Fees Earned</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Enter total receipts from services" {...field} />
+                      <Input
+                        type="text"
+                        placeholder="Enter total receipts from services"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -130,7 +165,9 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
 
               <Accordion type="single" collapsible className="w-full">
                 <AccordionItem value="allowable-expenses">
-                  <AccordionTrigger className="text-lg font-medium">Allowable Expenses</AccordionTrigger>
+                  <AccordionTrigger className="text-lg font-medium">
+                    Allowable Expenses
+                  </AccordionTrigger>
                   <AccordionContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4">
                       <FormField
@@ -140,7 +177,11 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
                           <FormItem>
                             <FormLabel>Office Rent/Utilities</FormLabel>
                             <FormControl>
-                              <Input type="text" placeholder="Enter amount" {...field} />
+                              <Input
+                                type="text"
+                                placeholder="Enter amount"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -152,9 +193,15 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
                         name="allowableExpenses.travelExpenses"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Travel and Communication Expenses</FormLabel>
+                            <FormLabel>
+                              Travel and Communication Expenses
+                            </FormLabel>
                             <FormControl>
-                              <Input type="text" placeholder="Enter amount" {...field} />
+                              <Input
+                                type="text"
+                                placeholder="Enter amount"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -166,9 +213,15 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
                         name="allowableExpenses.professionalFees"
                         render={({ field }) => (
                           <FormItem>
-                            <FormLabel>Professional Fees (legal or accounting)</FormLabel>
+                            <FormLabel>
+                              Professional Fees (legal or accounting)
+                            </FormLabel>
                             <FormControl>
-                              <Input type="text" placeholder="Enter amount" {...field} />
+                              <Input
+                                type="text"
+                                placeholder="Enter amount"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -182,7 +235,11 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
                           <FormItem>
                             <FormLabel>Other Operational Expenses</FormLabel>
                             <FormControl>
-                              <Input type="text" placeholder="Enter amount" {...field} />
+                              <Input
+                                type="text"
+                                placeholder="Enter amount"
+                                {...field}
+                              />
                             </FormControl>
                             <FormMessage />
                           </FormItem>
@@ -200,7 +257,11 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
                   <FormItem>
                     <FormLabel>Depreciation (if applicable)</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Enter amount" {...field} />
+                      <Input
+                        type="text"
+                        placeholder="Enter amount"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -214,7 +275,11 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
                   <FormItem>
                     <FormLabel>TDS / Advance Tax Paid</FormLabel>
                     <FormControl>
-                      <Input type="text" placeholder="Enter amount already deducted or advanced" {...field} />
+                      <Input
+                        type="text"
+                        placeholder="Enter amount already deducted or advanced"
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -227,15 +292,25 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
                 type="button"
                 variant="outline"
                 className="border-[#0f6e6e] text-[#0f6e6e]"
-                onClick={() => router.push(`/tax-form/${params.id}/income/salary`)}
+                onClick={() =>
+                  router.push(`/tax-form/${unwrappedParams.id}/income/salary`)
+                }
               >
                 Back
               </Button>
               <div className="space-x-4">
-                <Button type="submit" variant="outline" className="border-[#0f6e6e] text-[#0f6e6e]">
+                <Button
+                  type="submit"
+                  variant="outline"
+                  className="border-[#0f6e6e] text-[#0f6e6e]"
+                >
                   Save and Continue to Next Section
                 </Button>
-                <Button type="button" className="bg-[#0f6e6e] hover:bg-[#0c5c5c]" onClick={handleCompleteAll}>
+                <Button
+                  type="button"
+                  className="bg-[#0f6e6e] hover:bg-[#0c5c5c]"
+                  onClick={handleCompleteAll}
+                >
                   Submit All Income Details
                 </Button>
               </div>
@@ -244,6 +319,5 @@ export default function ServiceIncomePage({ params }: { params: { id: string } }
         </Form>
       </CardContent>
     </Card>
-  )
+  );
 }
-
