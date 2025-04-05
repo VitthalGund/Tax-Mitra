@@ -67,7 +67,6 @@ export async function POST(req) {
     return NextResponse.json({
       success: true,
       answer,
-      userType,
       query,
     });
   } catch (error) {
@@ -86,8 +85,7 @@ export async function GET() {
   return NextResponse.json({
     message: "Please use POST method with query and userType",
     example: {
-      query: "What are the tax slabs for FY 2024-25?",
-      userType: "individual",
+      query: "What are the tax slabs for FY 2024-25?"
     },
   });
 }
