@@ -1,15 +1,13 @@
-import  React from "react"
-import Link from "next/link"
-import  { Metadata } from "next"
+import React from "react";
+import Link from "next/link";
+import { Metadata } from "next";
 
 export const metadata = {
   title: "TaxMitra - Tax Filing",
   description: "File your taxes easily with TaxMitra",
-}
+};
 
-export default function TaxFormLayout({
-  children,
-}) {
+export default function TaxFormLayout({ children }) {
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -49,4 +47,3 @@ export default function TaxFormLayout({
     </div>
   );
 }
-
