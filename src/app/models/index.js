@@ -142,7 +142,6 @@ const TaxRecordSchema = new Schema({
   businessIncome: BusinessIncomeSchema,
   investmentIncome: InvestmentIncomeSchema,
   otherIncome: OtherIncomeSchema,
-  deductions: DeductionSchema,
   taxPaid: { type: Number, default: 0 },
   tdsDetails: { type: Number, default: 0 },
   recommendations: RecommendationSchema,

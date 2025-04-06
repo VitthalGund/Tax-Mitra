@@ -109,13 +109,14 @@ export default function PersonalInfoPage({ params }) {
         JSON.stringify(updatedData)
       );
       await fetch(
-        `/api/users?email=${encodeURIComponent(formData.personalInfo.email)}`,
+        `/api/users`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
+            email: formData.personalInfo.email,
             name: formData.personalInfo.name,
             dob: formData.personalInfo.dob,
             pan: formData.personalInfo.pan,
@@ -130,11 +131,12 @@ export default function PersonalInfoPage({ params }) {
             },
           }),
         }
-      ).then((res) => {
-        if (res.status === 200) {
+      ).then((res) => res.json()).then(data => {
+        console.log({ data })
+        if (data.status === 200) {
           console.log("User updated successfully");
         } else {
-          console.error("Failed to update user data");
+          console.log("Failed to update user data");
         }
       });
 

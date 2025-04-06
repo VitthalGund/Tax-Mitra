@@ -12,6 +12,7 @@ const putSchema = z.object({
   name: z.string().optional(),
   pan: z.string().optional(),
   dob: z.coerce.date().optional(),
+  email: z.string().email(),
   phone: z.string().optional(),
   address: z
     .object({
@@ -49,16 +50,8 @@ export async function PUT(req) {
     const body = await req.json();
 
     const parsed = putSchema.parse(body);
-    const email = req.nextUrl.searchParams.get("email");
 
-    if (!email) {
-      return NextResponse.json(
-        { error: "Email query param required to update user" , res1:body, res: parsed, email:email},
-        { status: 400 }
-      );
-    }
-
-    const updated = await User.findOneAndUpdate({ email }, parsed, {
+    const updated = await User.findOneAndUpdate({ email: parsed?.email }, parsed, {
       new: true,
     });
 
