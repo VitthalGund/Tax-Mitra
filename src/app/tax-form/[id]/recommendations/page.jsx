@@ -13,12 +13,16 @@ import { FormSteps } from "../../../../components/tax-form/form-steps"
 export default function RecommendationsPage({ params }) {
   const router = useRouter()
   const [formData, setFormData] = useState(null)
+  const [reportData, setReportData] = useState(null)
   const unwrappedParams = React.use(params)
   useEffect(() => {
     // Load data from localStorage
     const savedData = localStorage.getItem(`taxmitra-${unwrappedParams.id}`)
+    const savedReportData = localStorage.getItem("formData"); 
     if (savedData) {
       setFormData(JSON.parse(savedData))
+      setReportData(JSON.parse(savedReportData));
+      console.log(reportData)
     } else {
       router.push(`/tax-form/${unwrappedParams.id}/user-type`)
     }
@@ -235,7 +239,7 @@ export default function RecommendationsPage({ params }) {
             <FileText size={16} />
             Print Tax Report
           </Button>
-          <div className="space-x-4">
+          <div className="space-y-4 self-end">
             <Button
               variant="outline"
               className="border-[#0f6e6e] text-[#0f6e6e] flex items-center gap-2"

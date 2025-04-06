@@ -24,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "../../../../components/ui/form";
+import { FileText } from "lucide-react";
 
 // Define validation schema
 const personalInfoSchema = z.object({
@@ -41,7 +42,7 @@ const personalInfoSchema = z.object({
     return (
       date < today &&
       date >
-      new Date(today.getFullYear() - 100, today.getMonth(), today.getDate())
+        new Date(today.getFullYear() - 100, today.getMonth(), today.getDate())
     );
   }, "Please enter a valid date of birth"),
   email: z.string().email("Invalid email address"),
@@ -54,7 +55,6 @@ const personalInfoSchema = z.object({
   pincode: z.string().regex(/^\d{6}$/, "PIN code must be 6 digits"),
   residentialStatus: z.string().min(1, "Please select your residential status"),
 });
-
 
 export default function PersonalInfoPage({ params }) {
   const router = useRouter();
@@ -108,37 +108,36 @@ export default function PersonalInfoPage({ params }) {
         `taxmitra-${unwrappedParams.id}`,
         JSON.stringify(updatedData)
       );
-      await fetch(
-        `/api/users`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
+      await fetch(`/api/users`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: formData.personalInfo.email,
+          name: formData.personalInfo.name,
+          dob: formData.personalInfo.dob,
+          pan: formData.personalInfo.pan,
+          phone: formData.personalInfo.mobile,
+          address: {
+            street: formData.personalInfo.street,
+            city: formData.personalInfo.city,
+            state: formData.personalInfo.state,
+            postalCode: formData.personalInfo.pincode,
+            residentialStatus: formData.personalInfo.residentialStatus,
+            country: "India", // Hardcoded is fine unless you want to make it dynamic
           },
-          body: JSON.stringify({
-            email: formData.personalInfo.email,
-            name: formData.personalInfo.name,
-            dob: formData.personalInfo.dob,
-            pan: formData.personalInfo.pan,
-            phone: formData.personalInfo.mobile,
-            address: {
-              street: formData.personalInfo.street,
-              city: formData.personalInfo.city,
-              state: formData.personalInfo.state,
-              postalCode: formData.personalInfo.pincode,
-              residentialStatus: formData.personalInfo.residentialStatus,
-              country: "India", // Hardcoded is fine unless you want to make it dynamic
-            },
-          }),
-        }
-      ).then((res) => res.json()).then(data => {
-        console.log({ data })
-        if (data.status === 200) {
-          console.log("User updated successfully");
-        } else {
-          console.log("Failed to update user data");
-        }
-      });
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log({ data });
+          if (data.status === 200) {
+            console.log("User updated successfully");
+          } else {
+            console.log("Failed to update user data");
+          }
+        });
 
       router.push(`/tax-form/${unwrappedParams.id}/income/salary`);
     }
@@ -173,6 +172,20 @@ export default function PersonalInfoPage({ params }) {
 
       <Card className="mt-8">
         <CardContent className="pt-6">
+          <div className="flex justify-end mb-6">
+            <Button
+              variant="outline"
+              className="border-[#0f6e6e] text-[#0f6e6e] flex items-center gap-2"
+              onClick={() => {
+                if (typeof window !== "undefined") {
+                  window.print();
+                }
+              }}
+            >
+              <FileText size={16} />
+              Print Report
+            </Button>
+          </div>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

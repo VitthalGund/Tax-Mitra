@@ -33,7 +33,7 @@ export default function TaxFormLayout({
       <main className="container mx-auto py-8 px-4">{children}</main>
 
       {/* Footer */}
-      <footer className="container mx-auto py-6 px-4 border-t mt-8">
+      {/* <footer className="container mx-auto py-6 px-4 border-t mt-8">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-600">© 2025 TaxMitra. All rights reserved.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
@@ -45,8 +45,8 @@ export default function TaxFormLayout({
             </Link>
           </div>
         </div>
-      </footer>
+      </footer> */}
     </div>
-  )
+  );
 }
 

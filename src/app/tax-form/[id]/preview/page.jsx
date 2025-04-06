@@ -57,7 +57,7 @@ export default function PreviewPage({ params }) {
 
   const handleContinue = async () => {
     console.log({ formData })
-    await fetch(`/api/tax-records/`, {
+    const res = await fetch(`/api/tax-records/`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -73,14 +73,15 @@ export default function PreviewPage({ params }) {
       }),
     }).then((response) => response.json()).then((response) => {
       if (response.ok) {
-        console.log({ response: response })
         console.log("Data sent successfully")
       } else {
         console.error("Error sending data")
       }
     });
-    ;
-    // router.push(`/tax-form/${unwrappedParams.id}/recommendations`)
+    
+    // localStorage.setItem("report", JSON.stringify(res));
+    router.push(`/tax-form/${unwrappedParams.id}/recommendations`);
+
   }
 
   return (
