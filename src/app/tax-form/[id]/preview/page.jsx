@@ -55,8 +55,32 @@ export default function PreviewPage({ params }) {
     }
   }
 
-  const handleContinue = () => {
-    router.push(`/tax-form/${unwrappedParams.id}/recommendations`)
+  const handleContinue = async () => {
+    console.log({ formData })
+    await fetch(`/api/tax-records/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: formData.personalInfo.email,
+        financialYear: "2023-2024",
+        salaryIncome: formData.incomeDetails.salary,
+        serviceIncome: formData.incomeDetails.services,
+        businessIncome: formData.incomeDetails.business,
+        investmentIncome: formData.incomeDetails.investments,
+        otherIncome: formData.incomeDetails.other,
+      }),
+    }).then((response) => response.json()).then((response) => {
+      if (response.ok) {
+        console.log({ response: response })
+        console.log("Data sent successfully")
+      } else {
+        console.error("Error sending data")
+      }
+    });
+    ;
+    // router.push(`/tax-form/${unwrappedParams.id}/recommendations`)
   }
 
   return (
