@@ -1,9 +1,17 @@
 import { Sparkles } from "lucide-react";
+import Link from "next/link";
 import React from "react";
 
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-300 py-12">
+      <div className="bg-transparent p-6 rounded-xl shadow-lg lg:w-1/3 md:w-1/3 w-full mx-2">
+        <div className="flex text-cyan-600 justify-evenly absolute bottom-11 left-24">
+          <Link href={"channel link"} target="_blank">
+            Join the Whats App Community
+          </Link>
+        </div>
+      </div>
       <div className="mx-24">
         <div className="grid gap-8 md:grid-cols-4 ">
           <div className="">
