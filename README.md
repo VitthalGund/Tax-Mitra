@@ -1,36 +1,125 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# TaxMitra
 
-## Getting Started
+TaxMitra is an AI-assisted tax guidance and filing web app focused on Indian taxation. It combines guided tax data collection, personalized recommendations, and an in-app chatbot for tax questions.
 
-First, run the development server:
+## Product Overview (Non-Technical)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+### What problem TaxMitra solves
+- Tax filing is complex and stressful for most individuals.
+- Many users miss deductions and filing opportunities.
+- People need quick tax guidance without waiting for manual consultations.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Who it is for
+- Individual taxpayers who want guided filing and savings suggestions.
+- Early-stage business users exploring digital tax support.
+- Users who need quick answers about Indian tax rules.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### Core product journey
+1. **Sign up / sign in** with secure authentication.
+2. **Start a tax session** and choose user type.
+3. **Enter personal and income details** in a guided multi-step flow.
+4. **Review recommendations and summary** before finalizing.
+5. **Ask the AI chatbot** tax questions anytime.
+6. **Optionally schedule a call** using the built-in video call page.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Value proposition
+- Simpler filing flow through guided steps.
+- AI-backed tax assistance and recommendations.
+- Centralized experience for profile, tax data, and advisory support.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## Current Feature Set (Grounded in Code)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Landing page with product sections**: hero, features, how-it-works, testimonials, CTA (`/src/app/page.jsx`, `/src/components/home/*`).
+- **Authentication with Clerk**: custom sign-in/sign-up pages and protected routes (`/src/app/sign-in/page.jsx`, `/src/app/sign-up/page.jsx`, `/src/middleware.js`).
+- **Guided tax form flow** for:
+  - User type
+  - Personal information
+  - Income categories: salary, services, business, investments, other
+  - Preview and recommendations
+  (`/src/app/tax-form/[id]/**`).
+- **AI chatbot endpoint** for Indian tax Q&A (`/src/app/api/chatbot/route.js`) used by `/src/app/bot.jsx`.
+- **Tax records and recommendations APIs** (`/src/app/api/tax-records/**`).
+- **User profile APIs** (`/src/app/api/users/route.js`).
+- **Schedule-a-call page** using Zego UIKit (`/src/app/Schedule-a-Call/page.jsx`).
+- **Language selector hook integration** in navbar (`/src/components/Navbar.jsx`, `/src/hooks/useGoogleTranslate.js`).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+> Note: The user type UI shows “Corporate”, but it is currently disabled in the flow (`/src/app/tax-form/[id]/user-type/page.jsx`).
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Developer Documentation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Tech stack
+- Next.js 15 (App Router)
+- React 19
+- Tailwind CSS
+- Clerk authentication
+- MongoDB + Mongoose
+- Google Generative AI SDK
+- Zod + React Hook Form
+
+### Prerequisites
+- Node.js 20+ recommended
+- npm (lockfile is present)
+- Clerk project keys
+- MongoDB connection string
+- Gemini API key
+- (Optional) Zego credentials for video calling
+
+### Setup
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Copy environment variables:
+   ```bash
+   cp .env.example .env.local
+   ```
+3. Fill `.env.local` with real values.
+4. Start the app:
+   ```bash
+   npm run dev
+   ```
+5. Open `http://localhost:3000`.
+
+### Available scripts
+From `package.json`:
+- `npm run dev` – start local dev server
+- `npm run build` – production build
+- `npm run start` – run production server
+- `npm run lint` – run Next.js ESLint checks
+
+### Environment variables used by the app
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- `CLERK_SECRET_KEY`
+- `MONGO_URL`
+- `GEMINI_API_KEY`
+- `NEXT_PUBLIC_APP_ID` (Zego)
+- `NEXT_PUBLIC_SERVER_SEC` (Zego)
+
+### API routes
+- `POST /api/chatbot` – AI tax assistant query.
+- `GET /api/users` – list users.
+- `POST /api/users` – create user (email + gender).
+- `PUT /api/users` – update user profile by email.
+- `GET /api/tax-records` – list tax records.
+- `POST /api/tax-records` – create tax record and generate recommendations.
+- `GET /api/tax-records/[uui]` – fetch a tax record by `uui`.
+
+### Repository structure
+- `/src/app` – routes, pages, API handlers
+- `/src/components` – UI and feature components
+- `/src/models` – Mongoose models
+- `/src/lib` and `/src/app/lib` – DB connection helpers
+- `/src/context` – global form context
+- `/AI` – standalone Python experimentation/training artifacts
+
+---
+
+## Important Notes for Contributors
+
+- README now reflects current scripts and App Router file layout (`page.jsx`, not `app/page.js`).
+- Keep `.env.example` secret-free and placeholder-only.
+- If you add new environment variables or scripts, update this README in the same PR.
